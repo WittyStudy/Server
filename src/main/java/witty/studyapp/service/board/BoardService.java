@@ -1,7 +1,6 @@
-package witty.studyapp.service;
+package witty.studyapp.service.board;
 
-import org.springframework.stereotype.Service;
-import witty.studyapp.dto.NoticeDTO;
+import witty.studyapp.dto.board.NoticeDTO;
 import witty.studyapp.entity.Notice;
 
 import java.util.List;

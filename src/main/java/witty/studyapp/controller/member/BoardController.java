@@ -1,11 +1,11 @@
-package witty.studyapp.controller;
+package witty.studyapp.controller.member;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
-import witty.studyapp.dto.NoticeDTO;
+import witty.studyapp.dto.board.NoticeDTO;
 import witty.studyapp.entity.Notice;
-import witty.studyapp.service.BoardService;
+import witty.studyapp.service.board.BoardService;
 
 import javax.annotation.PostConstruct;
 import java.text.SimpleDateFormat;
@@ -13,7 +13,7 @@ import java.util.Date;
 import java.util.List;
 
 @RestController
-@RequestMapping("/boards")
+@RequestMapping("/members/{memberId}/boards")
 @RequiredArgsConstructor
 @Slf4j
 public class BoardController {
@@ -48,27 +48,26 @@ public class BoardController {
     }
 
     @GetMapping
-    public List<Notice> getBoards(){
+    public List<Notice> getBoards(@PathVariable String memberId){
         log.debug("Method getBoards called");
         return boardService.getNotices();
     }
 
     @PostMapping
-    public Long createBoard(@RequestBody NoticeDTO noticeDTO){
+    public Long createBoard(@PathVariable String memberId, @RequestBody NoticeDTO noticeDTO){
         log.debug("Method createBoard called");
-        Long noticeId = boardService.createNotice(noticeDTO);
-        return noticeId;
+        return boardService.createNotice(noticeDTO);
     }
 
     @PutMapping("/{noticeId}")
-    public Long updateBoard(@PathVariable long noticeId, @RequestBody NoticeDTO noticeDTO){
+    public Long updateBoard(@PathVariable String memberId, @PathVariable long noticeId, @RequestBody NoticeDTO noticeDTO){
         log.debug("Method updateBoard called");
         boardService.updateNotice(noticeId,noticeDTO);
         return noticeId;
     }
 
     @DeleteMapping("/{noticeId}")
-    public Long deleteBoard(@PathVariable long noticeId, @RequestBody NoticeDTO noticeDTO){
+    public Long deleteBoard(@PathVariable String memberId, @PathVariable long noticeId, @RequestBody NoticeDTO noticeDTO){
         log.debug("Method deleteBoard called");
         boardService.deleteNotice(noticeId);
         return noticeId;

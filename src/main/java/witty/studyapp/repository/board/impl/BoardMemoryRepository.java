@@ -1,10 +1,9 @@
-package witty.studyapp.repository.impl;
+package witty.studyapp.repository.board.impl;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
-import witty.studyapp.dto.NoticeDTO;
 import witty.studyapp.entity.Notice;
-import witty.studyapp.repository.BoardRepository;
+import witty.studyapp.repository.board.BoardRepository;
 
 import java.util.*;
 
@@ -12,8 +11,8 @@ import java.util.*;
 @Repository
 public class BoardMemoryRepository implements BoardRepository {
 
-    Map<Long, Notice> noticeMap;
-    Long count;
+    private final Map<Long, Notice> noticeMap;
+    private Long count;
 
     public BoardMemoryRepository() {
         noticeMap = new HashMap<>();
@@ -33,23 +32,21 @@ public class BoardMemoryRepository implements BoardRepository {
     @Override
     public void deleteById(Long id) {
         noticeMap.remove(id);
-        log.debug("Deleted ID: {id}",id);
+        log.debug("Deleted ID: {}",id);
     }
 
     @Override
-    public void updateById(Long id, NoticeDTO noticeDTO) {
-        Notice notice = Notice.getByDTO(noticeDTO);
+    public void updateById(Long id, Notice notice) {
         notice.setId(id);
         noticeMap.put(id,notice);
-        log.debug("Updated ID: {id}, Title: {title}",id,noticeDTO.getTitle());
+        log.debug("Updated ID: {}, Title: {}",id,notice.getTitle());
     }
 
     @Override
-    public Long save(NoticeDTO noticeDTO) {
-        Notice notice = Notice.getByDTO(noticeDTO);
+    public Long save(Notice notice) {
         notice.setId(++count);
         noticeMap.put(count,notice);
-        log.debug("Saved Id: {id}, Title: {title}",count,notice.getTitle());
+        log.debug("Saved Id: {}, Title: {}",count,notice.getTitle());
         return notice.getId();
     }
 }

@@ -1,11 +1,11 @@
-package witty.studyapp.service.impl;
+package witty.studyapp.service.board.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import witty.studyapp.dto.NoticeDTO;
+import witty.studyapp.dto.board.NoticeDTO;
 import witty.studyapp.entity.Notice;
-import witty.studyapp.repository.BoardRepository;
-import witty.studyapp.service.BoardService;
+import witty.studyapp.repository.board.BoardRepository;
+import witty.studyapp.service.board.BoardService;
 
 import java.util.List;
 
@@ -16,7 +16,8 @@ public class BoardServiceImpl implements BoardService {
     private final BoardRepository boardRepository;
 
     @Override
-    public Long createNotice(NoticeDTO notice) {
+    public Long createNotice(NoticeDTO noticeDTO) {
+        Notice notice = Notice.getByDTO(noticeDTO);
         return boardRepository.save(notice);
     }
 
@@ -26,7 +27,8 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
-    public void updateNotice(Long id, NoticeDTO notice) {
+    public void updateNotice(Long id, NoticeDTO noticeDTO) {
+        Notice notice = Notice.getByDTO(noticeDTO);
         boardRepository.updateById(id,notice);
     }
 
