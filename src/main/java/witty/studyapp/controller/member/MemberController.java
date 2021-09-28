@@ -2,13 +2,12 @@ package witty.studyapp.controller.member;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import witty.studyapp.dto.member.MemberLoginDTO;
 import witty.studyapp.dto.member.MemberRegisterDTO;
 import witty.studyapp.service.member.MemberService;
+
+import java.util.Map;
 
 @RestController
 @Slf4j
@@ -24,7 +23,17 @@ public class MemberController {
     }
 
     @PostMapping("/{memberId}/login")
-    public Object login(@RequestBody MemberLoginDTO memberLoginDTO){
-        return memberService.login(memberLoginDTO);
+    public Object login(@PathVariable long memberId, @RequestBody MemberLoginDTO memberLoginDTO){
+        return memberService.login(memberId, memberLoginDTO);
+    }
+
+    @PatchMapping("/{memberId}/updateName")
+    public Long patchMemberName(@PathVariable long memberId, @RequestBody String name){
+        return memberService.updateMemberName(memberId, name);
+    }
+
+    @PatchMapping("/{memberId}/updatePassword")
+    public Long patchMemberPassword(@PathVariable long memberId, @RequestBody String password){
+        return memberService.updateMemberPassword(memberId,password);
     }
 }
