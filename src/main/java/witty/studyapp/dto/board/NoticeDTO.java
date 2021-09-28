@@ -1,4 +1,4 @@
-package witty.studyapp.dto;
+package witty.studyapp.dto.board;
 
 import lombok.Data;
 

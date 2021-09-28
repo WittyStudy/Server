@@ -1,7 +1,7 @@
 package witty.studyapp.entity;
 
 import lombok.Data;
-import witty.studyapp.dto.NoticeDTO;
+import witty.studyapp.dto.board.NoticeDTO;
 
 @Data
 public class Notice {
