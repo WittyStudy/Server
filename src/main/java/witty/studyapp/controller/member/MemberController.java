@@ -37,12 +37,12 @@ public class MemberController {
         return memberService.login(memberId, memberLoginDTO);
     }
 
-    @PatchMapping("/{memberId}/updateName")
+    @PatchMapping("/{memberId}/update/name")
     public Long patchMemberName(@PathVariable long memberId, @RequestBody String name){
         return memberService.updateMemberName(memberId, name);
     }
 
-    @PatchMapping("/{memberId}/updatePassword")
+    @PatchMapping("/{memberId}/update/password")
     public Long patchMemberPassword(@PathVariable long memberId, @RequestBody String password){
         return memberService.updateMemberPassword(memberId,password);
     }
