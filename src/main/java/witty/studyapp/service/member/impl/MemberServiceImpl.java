@@ -21,7 +21,7 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public Long register(MemberRegisterDTO memberRegisterDTO) {
-        if(memberPolicy.verifyRegister(memberRegisterDTO) && !isAlreadyExist(memberRegisterDTO.getIdent())){
+        if(memberPolicy.verifyRegisterDTO(memberRegisterDTO) && !isAlreadyExistIdent(memberRegisterDTO.getIdent())){
             return memberRepository.save(Member.getByRegisterDTO(memberRegisterDTO));
         }else {
             return 0L;
@@ -40,16 +40,24 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public Long updateMemberName(Long memberId, String name) {
         return memberRepository.findById(memberId).map(member -> {
-            member.setName(name);
-            return member.getId();
+            if(memberPolicy.isValidName(name)) {
+                member.setName(name);
+                return member.getId();
+            }else{
+                return 0L;
+            }
         }).orElse(0L);
     }
 
     @Override
     public Long updateMemberPassword(Long memberId, String password) {
         return memberRepository.findById(memberId).map(member -> {
-            member.setPassword(password);
-            return member.getId();
+            if(memberPolicy.isValidPassword(password)) {
+                member.setPassword(password);
+                return member.getId();
+            }else{
+                return 0L;
+            }
         }).orElse(0L);
     }
 
@@ -59,7 +67,7 @@ public class MemberServiceImpl implements MemberService {
                 .orElse(false);
     }
 
-    private boolean isAlreadyExist(String ident){
+    private boolean isAlreadyExistIdent(String ident){
         return memberRepository.findByIdent(ident).isPresent();
     }
 }
