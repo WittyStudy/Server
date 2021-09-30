@@ -4,10 +4,6 @@ Spring MVC gradle jar project.
 
 ----------------------------------------
 
-# head
-
-[aa](#head)
-
 ## 0. Index
 
 [1. API](#API)
@@ -18,9 +14,9 @@ Spring MVC gradle jar project.
 
 [2. DTO](#DTO)
 
-- [2.1. Member DTO](#MemberDTO))
+- [2.1. Member DTO](#MemberDTO)
 
-- [2.2. Board DTO](#BoardDTO))
+- [2.2. Board DTO](#BoardDTO)
 
 ----------------------------------------
 
