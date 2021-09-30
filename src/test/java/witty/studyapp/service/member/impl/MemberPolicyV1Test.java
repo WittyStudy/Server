@@ -24,7 +24,7 @@ class MemberPolicyV1Test {
     @DisplayName("테스트 기본 설정 확인")
     void identTest0(){
         MemberPolicyV1 memberPolicyV1 = new MemberPolicyV1();
-        assertThat(memberPolicyV1.verifyRegister(dto)).isEqualTo(true);
+        assertThat(memberPolicyV1.verifyRegisterDTO(dto)).isEqualTo(true);
     }
 
     @Test
@@ -33,7 +33,7 @@ class MemberPolicyV1Test {
         dto.setIdent("Ident");
 
         MemberPolicyV1 memberPolicyV1 = new MemberPolicyV1();
-        assertThat(memberPolicyV1.verifyRegister(dto)).isEqualTo(true);
+        assertThat(memberPolicyV1.verifyRegisterDTO(dto)).isEqualTo(true);
     }
 
     @Test
@@ -42,7 +42,7 @@ class MemberPolicyV1Test {
         dto.setIdent("Ide  ");
 
         MemberPolicyV1 memberPolicyV1 = new MemberPolicyV1();
-        assertThat(memberPolicyV1.verifyRegister(dto)).isEqualTo(false);
+        assertThat(memberPolicyV1.verifyRegisterDTO(dto)).isEqualTo(false);
     }
 
     @Test
@@ -51,7 +51,7 @@ class MemberPolicyV1Test {
         dto.setIdent("Ide\t");
 
         MemberPolicyV1 memberPolicyV1 = new MemberPolicyV1();
-        assertThat(memberPolicyV1.verifyRegister(dto)).isEqualTo(false);
+        assertThat(memberPolicyV1.verifyRegisterDTO(dto)).isEqualTo(false);
     }
 
     @Test
@@ -60,7 +60,7 @@ class MemberPolicyV1Test {
         dto.setIdent("Ide d");
 
         MemberPolicyV1 memberPolicyV1 = new MemberPolicyV1();
-        assertThat(memberPolicyV1.verifyRegister(dto)).isEqualTo(false);
+        assertThat(memberPolicyV1.verifyRegisterDTO(dto)).isEqualTo(false);
     }
 
     @Test
@@ -69,7 +69,7 @@ class MemberPolicyV1Test {
         dto.setName("김minz");
 
         MemberPolicyV1 memberPolicyV1 = new MemberPolicyV1();
-        assertThat(memberPolicyV1.verifyRegister(dto)).isEqualTo(false);
+        assertThat(memberPolicyV1.verifyRegisterDTO(dto)).isEqualTo(false);
     }
 
     @Test

@@ -5,9 +5,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 import witty.studyapp.dto.member.MemberLoginDTO;
 import witty.studyapp.dto.member.MemberRegisterDTO;
+import witty.studyapp.entity.Member;
 import witty.studyapp.service.member.MemberService;
 
-import java.util.Map;
+import java.util.List;
 
 @RestController
 @Slf4j
@@ -16,6 +17,15 @@ import java.util.Map;
 public class MemberController {
 
     private final MemberService memberService;
+
+    /**
+     * TEST CODE
+     * @return All members
+     */
+    @GetMapping
+    public List<Member> test(){
+        return memberService.getAllMembers();
+    }
 
     @PostMapping
     public Long register(@RequestBody MemberRegisterDTO memberRegisterDTO){

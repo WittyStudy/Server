@@ -1,6 +1,7 @@
 package witty.studyapp.service.member.impl;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import witty.studyapp.dto.member.MemberLoginDTO;
 import witty.studyapp.dto.member.MemberRegisterDTO;
@@ -9,9 +10,9 @@ import witty.studyapp.repository.member.MemberRepository;
 import witty.studyapp.service.member.MemberPolicy;
 import witty.studyapp.service.member.MemberService;
 
-import java.util.Map;
-import java.util.Optional;
+import java.util.List;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class MemberServiceImpl implements MemberService {
@@ -44,6 +45,7 @@ public class MemberServiceImpl implements MemberService {
                 member.setName(name);
                 return member.getId();
             }else{
+                log.debug("memberId:'{}' is failed to update name:'{}'",memberId,name);
                 return 0L;
             }
         }).orElse(0L);
@@ -56,9 +58,15 @@ public class MemberServiceImpl implements MemberService {
                 member.setPassword(password);
                 return member.getId();
             }else{
+                log.debug("memberId:'{}' is failed to update password:'{}'",memberId,password);
                 return 0L;
             }
         }).orElse(0L);
+    }
+
+    @Override
+    public List<Member> getAllMembers() {
+        return memberRepository.findAll();
     }
 
     private boolean verifyMemberLogin(Long memberId, MemberLoginDTO memberLoginDTO){
