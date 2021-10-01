@@ -52,6 +52,12 @@ path:	    "/members/{memberId}/update/password
 require:    text (String)
 ```
 
+- delete
+```
+method:	    "DELETE"
+path:	    "/members/{memberId}"
+```
+
 - test api
 ```
 method:	    "GET"
