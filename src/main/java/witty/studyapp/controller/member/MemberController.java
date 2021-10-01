@@ -46,4 +46,9 @@ public class MemberController {
     public Long patchMemberPassword(@PathVariable long memberId, @RequestBody String password){
         return memberService.updateMemberPassword(memberId,password);
     }
+
+    @DeleteMapping("/{memberId}")
+    public Long deleteMemberById(@PathVariable long memberId){
+        return memberService.deleteMember(memberId);
+    }
 }

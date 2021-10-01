@@ -42,4 +42,14 @@ public class MemberMemoryRepository implements MemberRepository {
     public List<Member> findAll() {
         return new ArrayList<>(members.values());
     }
+
+    @Override
+    public boolean deleteById(Long id) {
+        if(members.get(id) != null){
+            members.remove(id);
+            return true;
+        }else{
+            return false;
+        }
+    }
 }

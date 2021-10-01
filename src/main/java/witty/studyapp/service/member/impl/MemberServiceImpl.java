@@ -69,6 +69,11 @@ public class MemberServiceImpl implements MemberService {
         return memberRepository.findAll();
     }
 
+    @Override
+    public Long deleteMember(long memberId) {
+        return memberRepository.deleteById(memberId) ? memberId : 0L;
+    }
+
     private boolean verifyMemberLogin(Long memberId, MemberLoginDTO memberLoginDTO){
         return memberRepository.findByIdent(memberLoginDTO.getIdent())
                 .map(member -> member.getPassword().equals(memberLoginDTO.getPassword()) && member.getId().equals(memberId))

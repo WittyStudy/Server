@@ -12,4 +12,5 @@ public interface MemberService {
     Long updateMemberName(Long memberId, String name);
     Long updateMemberPassword(Long memberId, String password);
     List<Member> getAllMembers();
+    Long deleteMember(long memberId);
 }
