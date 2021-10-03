@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import witty.studyapp.dto.member.MemberLoginDTO;
 import witty.studyapp.dto.member.MemberRegisterDTO;
+import witty.studyapp.dto.util.DtoUtil;
 import witty.studyapp.entity.Member;
 import witty.studyapp.repository.member.MemberRepository;
 import witty.studyapp.service.member.MemberPolicy;
@@ -19,11 +20,16 @@ public class MemberServiceImpl implements MemberService {
 
     private final MemberRepository memberRepository;
     private final MemberPolicy memberPolicy;
+    private final DtoUtil dtoUtil;
 
     @Override
     public Long register(MemberRegisterDTO memberRegisterDTO) {
         if(memberPolicy.verifyRegisterDTO(memberRegisterDTO) && !isAlreadyExistIdent(memberRegisterDTO.getIdent())){
-            return memberRepository.save(Member.getByRegisterDTO(memberRegisterDTO));
+            try {
+                return memberRepository.save(dtoUtil.getByDTO(memberRegisterDTO)).getId();
+            }catch(Exception e){    // Exception 처리 필요.
+                return 0L;
+            }
         }else {
             return 0L;
         }
@@ -42,7 +48,7 @@ public class MemberServiceImpl implements MemberService {
     public Long updateMemberName(Long memberId, String name) {
         return memberRepository.findById(memberId).map(member -> {
             if(memberPolicy.isValidName(name)) {
-                member.setName(name);
+                memberRepository.updateName(name);
                 return member.getId();
             }else{
                 log.debug("memberId:'{}' is failed to update name:'{}'",memberId,name);
@@ -55,7 +61,7 @@ public class MemberServiceImpl implements MemberService {
     public Long updateMemberPassword(Long memberId, String password) {
         return memberRepository.findById(memberId).map(member -> {
             if(memberPolicy.isValidPassword(password)) {
-                member.setPassword(password);
+                memberRepository.updatePassword(password);
                 return member.getId();
             }else{
                 log.debug("memberId:'{}' is failed to update password:'{}'",memberId,password);
@@ -71,7 +77,12 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public Long deleteMember(long memberId) {
-        return memberRepository.deleteById(memberId) ? memberId : 0L;
+        try{
+            memberRepository.deleteById(memberId);
+            return memberId;
+        }catch(Exception e) {
+            return 0L;
+        }
     }
 
     private boolean verifyMemberLogin(Long memberId, MemberLoginDTO memberLoginDTO){
