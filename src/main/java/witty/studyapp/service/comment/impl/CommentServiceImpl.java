@@ -8,6 +8,7 @@ import witty.studyapp.repository.comment.CommentRepository;
 import witty.studyapp.service.comment.CommentService;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -38,7 +39,10 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public Long updateComment(CommentDTO commentDTO, Long commentId) {
-        commentRepository.findById(commentId);
-        return commentId;
+        Optional<Comment> commentOptional = commentRepository.findById(commentId);
+        return commentOptional.map(comment -> {
+            comment.setContext(commentDTO.getContent());
+            return commentId;
+        }).orElse(0L);
     }
 }
