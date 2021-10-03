@@ -97,6 +97,40 @@ path:	    "/members/{memberId}/boards/{noticeId}"
 require:    application/json (NoticeDTO)
 ```
 
+### <a name="CommentAPI">1.3. Comment API </a>
+
+- create comment
+```
+method:     "POST"
+path:       "/comments/members/{memberId}/boards/{boardId}"
+require:    application/json (CommentDTO)
+```
+
+- get comments by memberID
+```
+method:     "GET"
+path:       "/comments/members/{memberId}
+```
+
+- get comments by boardId
+```
+method:     "GET"
+path:       "/comments/boards/{boardId}
+```
+
+- update comment
+```
+method:     "PATCH"
+path:       "/comments/{commentId}"
+required:   application/json (CommentDTO)
+```
+
+- delete comment
+```
+method:     "DELETE"
+path:       "/comments/{commentId}"
+```
+
 --------------------------------------------
 
 ## <a name="DTO">2. DTO</a>
@@ -127,5 +161,12 @@ String  title
 Long    writerId
 Long    views
 String  date    (format:"yyyy-MM-dd kk:mm:ss")
+String  content
+```
+
+### <a name="CommentDTO">2.3. Comment DTO</a>
+
+- CommentDTO
+```
 String  content
 ```
