@@ -1,24 +1,36 @@
 package witty.studyapp.entity;
 
-import lombok.Data;
+import lombok.*;
 import witty.studyapp.dto.board.NoticeDTO;
 
-@Data
-public class Notice {
-    private Long id;
-    private String title;
-    private Long writerId;
-    private Long views;
-    private String date;
-    private String content;
+import javax.persistence.*;
 
-    public static Notice getByDTO(NoticeDTO noticeDTO){
-        Notice notice = new Notice();
-        notice.setTitle(noticeDTO.getTitle());
-        notice.setWriterId(noticeDTO.getWriterId());
-        notice.setViews(noticeDTO.getViews());
-        notice.setDate(noticeDTO.getDate());
-        notice.setContent(noticeDTO.getContent());
-        return notice;
-    }
+@Getter
+@Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@Entity
+public class Notice {
+
+    @Id
+    @GeneratedValue(strategy= GenerationType.IDENTITY)
+    @Column(name = "NOTICE_ID")
+    private Long id;
+
+    @Column(name="title")
+    private String title;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "MEMBER_ID")
+    private Member writer;
+
+    @Column(name="views")
+    private Long views;
+
+    @Column(name="date")
+    private String date;
+
+    @Column(name="content")
+    private String content;
 }

@@ -1,21 +1,30 @@
 package witty.studyapp.entity;
 
-import lombok.Data;
-import witty.studyapp.dto.comment.CommentDTO;
+import lombok.*;
 
-@Data
+import javax.persistence.*;
+
+@Getter
+@Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@Entity
 public class Comment {
+
+    @Id
+    @GeneratedValue(strategy= GenerationType.IDENTITY)
+    @Column(name = "COMMENT_ID")
     private Long id;
-    private String context;
-    private Long memberId;
-    private Long boardId;
 
-    public static Comment getByDTO(CommentDTO commentDTO, Long memberId, Long boardId){
-        Comment comment = new Comment();
-        comment.setContext(commentDTO.getContent());
-        comment.setMemberId(memberId);
-        comment.setBoardId(boardId);
+    @Column(name="content")
+    private String content;
 
-        return comment;
-    }
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "MEMBER_ID")
+    private Member writer;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "NOTICE_ID")
+    private Notice notice;
 }

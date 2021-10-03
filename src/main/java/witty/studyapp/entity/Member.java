@@ -1,22 +1,32 @@
 package witty.studyapp.entity;
 
-import lombok.Data;
+import lombok.*;
 import witty.studyapp.dto.member.MemberRegisterDTO;
 
-@Data
-public class Member {
-    private Long id;
-    private String ident;
-    private String name;
-    private String password;
-    private String email;
+import javax.persistence.*;
 
-    public static Member getByRegisterDTO(MemberRegisterDTO memberRegisterDTO){
-        Member member = new Member();
-        member.setIdent(memberRegisterDTO.getIdent());
-        member.setName(memberRegisterDTO.getName());
-        member.setPassword(memberRegisterDTO.getPassword());
-        member.setEmail(memberRegisterDTO.getEmail());
-        return member;
-    }
+@Getter
+@Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@Entity
+public class Member {
+
+    @Id
+    @GeneratedValue(strategy= GenerationType.IDENTITY)
+    @Column(name = "MEMBER_ID")
+    private Long id;
+
+    @Column(name="ident")
+    private String ident;
+
+    @Column(name="name")
+    private String name;
+
+    @Column(name="password")
+    private String password;
+
+    @Column(name="email")
+    private String email;
 }
