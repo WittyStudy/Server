@@ -71,11 +71,4 @@ class MemberPolicyV1Test {
         MemberPolicyV1 memberPolicyV1 = new MemberPolicyV1();
         assertThat(memberPolicyV1.verifyRegisterDTO(dto)).isEqualTo(false);
     }
-
-    @Test
-    void testTest(){
-        String string = "Hello2";
-        System.out.println(string.matches("[a-zA-Z]*$"));
-    }
-
 }
