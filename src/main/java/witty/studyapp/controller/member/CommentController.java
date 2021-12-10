@@ -34,12 +34,14 @@ public class CommentController {
 
     @PostMapping("/members/{memberId}/boards/{boardId}")
     public Long createComment(@RequestBody CommentDTO commentDTO, @PathVariable Long memberId, @PathVariable Long boardId){
-        return commentService.createComment(commentDTO, memberId, boardId);
+        Comment comment = new Comment();
+        comment.setContent(commentDTO.getContent());
+        return commentService.createComment(comment, memberId, boardId);
     }
 
     @PatchMapping("/{commentId}")
-    public Long updateCommentContext(@RequestBody CommentDTO commentDTO, @PathVariable Long commentId){
-        return commentService.updateComment(commentDTO,commentId);
+    public Long updateCommentContext(@RequestBody Comment comment, @PathVariable Long commentId){
+        return commentService.updateComment(comment,commentId);
     }
 
     @DeleteMapping("/{commentId}")

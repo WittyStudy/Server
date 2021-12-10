@@ -2,8 +2,8 @@ package witty.studyapp.controller.member;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import witty.studyapp.dto.member.MemberLoginDTO;
 import witty.studyapp.dto.member.MemberRegisterDTO;
 import witty.studyapp.entity.Member;
 import witty.studyapp.service.member.MemberService;
@@ -28,13 +28,17 @@ public class MemberController {
     }
 
     @PostMapping
-    public Long register(@RequestBody MemberRegisterDTO memberRegisterDTO){
-        return memberService.register(memberRegisterDTO);
+    public Long register(@RequestBody @Validated MemberRegisterDTO memberRegisterDTO){
+        Member member = new Member();
+        member.setName(memberRegisterDTO.getName());
+        member.setPassword(memberRegisterDTO.getPassword());
+        member.setEmail(memberRegisterDTO.getEmail());
+        return memberService.register(member);
     }
 
     @PostMapping("/{memberId}/login")
-    public Object login(@PathVariable long memberId, @RequestBody MemberLoginDTO memberLoginDTO){
-        return memberService.login(memberId, memberLoginDTO);
+    public Object login(@PathVariable long memberId, @RequestBody Member member){
+        return memberService.login(memberId, member);
     }
 
     @PatchMapping("/{memberId}/name")

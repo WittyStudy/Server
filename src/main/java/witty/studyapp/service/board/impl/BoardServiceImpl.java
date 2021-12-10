@@ -2,8 +2,6 @@ package witty.studyapp.service.board.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import witty.studyapp.dto.board.NoticeDTO;
-import witty.studyapp.dto.util.DtoUtil;
 import witty.studyapp.entity.Member;
 import witty.studyapp.entity.Notice;
 import witty.studyapp.repository.board.BoardRepository;
@@ -19,12 +17,10 @@ public class BoardServiceImpl implements BoardService {
 
     private final BoardRepository boardRepository;
     private final MemberRepository memberRepository;
-    private final DtoUtil dtoUtil;
 
     @Override
-    public Long createNotice(NoticeDTO noticeDTO) {
-        Notice notice = dtoUtil.getByDTO(noticeDTO);
-        Optional<Member> optionalMember = memberRepository.findById(noticeDTO.getWriterId());
+    public Long createNotice(Notice notice) {
+        Optional<Member> optionalMember = memberRepository.findById(notice.getWriter().getId());
         return optionalMember.map(member -> {
             notice.setWriter(member);
             return boardRepository.save(notice).getId();
@@ -37,14 +33,14 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
-    public Long updateNotice(Long id, NoticeDTO noticeDTO) {
+    public Long updateNotice(Long id, Notice notice) {
         try {
-            boardRepository.updateTitle(noticeDTO.getTitle(),id);
-            boardRepository.updateContent(noticeDTO.getContent(),id);
-            boardRepository.updateDate(noticeDTO.getDate(),id);
+            boardRepository.updateTitle(notice.getTitle(),id);
+            boardRepository.updateContent(notice.getContent(),id);
+            boardRepository.updateDate(notice.getDate(),id);
 
             return id;
-        }catch(Exception e){    // Exception 정의 필요.
+        }catch(Exception e){    // TODO : Exception 정의 필요.
             return 0L;
         }
     }

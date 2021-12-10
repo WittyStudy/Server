@@ -2,8 +2,6 @@ package witty.studyapp.service.comment.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import witty.studyapp.dto.comment.CommentDTO;
-import witty.studyapp.dto.util.DtoUtil;
 import witty.studyapp.entity.Comment;
 import witty.studyapp.repository.board.BoardRepository;
 import witty.studyapp.repository.comment.CommentRepository;
@@ -21,7 +19,6 @@ public class CommentServiceImpl implements CommentService {
     private final MemberRepository memberRepository;
     private final BoardRepository boardRepository;
     private final CommentRepository commentRepository;
-    private final DtoUtil dtoUtil;
 
     @Override
     public List<Comment> getCommentsByBoardId(Long boardId) {
@@ -44,8 +41,7 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public Long createComment(CommentDTO commentDTO, Long memberId, Long boardId) {
-        Comment comment = dtoUtil.getByDTO(commentDTO);
+    public Long createComment(Comment comment, Long memberId, Long boardId) {
         try {
             return memberRepository.findById(memberId).map(member -> {
                 comment.setWriter(member);
@@ -70,11 +66,11 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public Long updateComment(CommentDTO commentDTO, Long commentId) {
+    public Long updateComment(Comment comment, Long commentId) {
         Optional<Comment> commentOptional = commentRepository.findById(commentId);
         try {
-            return commentOptional.map(comment -> {
-                comment.setContent(commentDTO.getContent());
+            return commentOptional.map(c -> {
+                c.setContent(comment.getContent());
                 return commentId;
             }).orElse(0L);
         }catch(Exception e){

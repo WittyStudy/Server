@@ -1,11 +1,10 @@
 package witty.studyapp.service.member;
 
-import witty.studyapp.dto.member.MemberRegisterDTO;
+import witty.studyapp.entity.Member;
 
 public interface MemberPolicy {
-    boolean verifyRegisterDTO(MemberRegisterDTO memberRegisterDTO);
-    boolean isValidIdent(String ident);
-    boolean isValidPassword(String password);
+    boolean verifyMember(Member member);
     boolean isValidEmail(String email);
     boolean isValidName(String name);
+    boolean isValidPassword(String password);
 }
