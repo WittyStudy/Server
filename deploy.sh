@@ -6,7 +6,7 @@ cd $REPOSITORY
 APP_NAME=study-app
 JAR_NAME=$(ls $REPOSITORY/build/libs/ | grep '.jar' | tail -n 1)
 JAR_PATH=$REPOSITORY/build/libs/$JAR_NAME
-ENC_PASS=$(echo ${jasypt.encryptor.password})
+ENC_PASS=$(echo $ENC_PASS)
 
 CURRENT_PID=$(pgrep -f $APP_NAME)
 
