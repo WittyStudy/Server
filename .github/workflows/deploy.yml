@@ -41,7 +41,7 @@ jobs:
         shell: bash
         
       - name: Build with Gradle
-        run: ./gradlew clean build -Djasypt.encryptor.password=${{ secrets.ENC_PASSWORD }}
+        run: ./gradlew clean build -Djasypt_encryptor_password=${{ secrets.ENC_PASSWORD }}
         shell: bash
         
       - name: Make zip file
