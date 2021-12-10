@@ -14,9 +14,17 @@ env:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
+  test:
+    name: TEST
+    runs-on: ubuntu-18.04
+    env:
+      jasypt.encryptor.password: ${{ secrets.ENC_PASSWORD }}
+
   deploy:
     name: DEPLOY
     runs-on: ubuntu-18.04
+    env:
+      jasypt.encryptor.password: ${{ secrets.ENC_PASSWORD }}
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
