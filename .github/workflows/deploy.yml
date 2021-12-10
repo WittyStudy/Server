@@ -17,8 +17,6 @@ jobs:
   deploy:
     name: DEPLOY
     runs-on: ubuntu-18.04
-    env:
-      jasypt.encryptor.password: ${{ secrets.ENC_PASSWORD }}
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
@@ -43,7 +41,7 @@ jobs:
         shell: bash
         
       - name: Build with Gradle
-        run: ./gradlew clean build -d
+        run: ./gradlew clean build -Djasypt.encryptor.password=${{ secrets.ENC_PASSWORD }}
         shell: bash
         
       - name: Make zip file
