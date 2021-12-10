@@ -2,8 +2,14 @@ package witty.studyapp.dto.member;
 
 import lombok.Data;
 
+import javax.validation.constraints.NotBlank;
+
 @Data
 public class MemberLoginDTO {
-    private String ident;
+
+    @NotBlank
+    private String email;
+
+    @NotBlank
     private String password;
 }
