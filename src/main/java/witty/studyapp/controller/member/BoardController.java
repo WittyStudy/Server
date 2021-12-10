@@ -6,68 +6,50 @@ import org.springframework.web.bind.annotation.*;
 import witty.studyapp.dto.board.NoticeDTO;
 import witty.studyapp.entity.Notice;
 import witty.studyapp.service.board.BoardService;
+import witty.studyapp.service.member.MemberService;
 
-import javax.annotation.PostConstruct;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
 @RestController
-@RequestMapping("/members/{memberId}/boards")
+@RequestMapping("/boards")
 @RequiredArgsConstructor
 @Slf4j
 public class BoardController {
+    // TODO : member Session & Cookie 이용 로그인 세션 구현 필요.
+    //   (member login, register 외엔 인터셉터를 적용하고, member 정보를 받아 와야 함)
 
     private final BoardService boardService;
-
-    @PostConstruct
-    public void init(){
-        NoticeDTO notice1 = new NoticeDTO();
-
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd kk:mm:ss");
-        String currentDate = dateFormat.format(new Date());
-        notice1.setDate(currentDate);
-
-        notice1.setContent("Content1");
-        notice1.setTitle("Title1");
-        notice1.setWriterId(1L);
-        notice1.setViews(30L);
-
-        NoticeDTO notice2 = new NoticeDTO();
-
-        notice2.setDate(currentDate);
-        notice2.setContent("Content2");
-        notice2.setTitle("Title2");
-        notice2.setWriterId(2L);
-        notice2.setViews(15L);
-
-        boardService.createNotice(notice1);
-        boardService.createNotice(notice2);
-
-        log.debug("Init board controller for test.");
-    }
+    private final MemberService memberService;
 
     @GetMapping
-    public List<Notice> getBoards(@PathVariable String memberId){
+    public List<Notice> getBoards(){
         log.debug("Method getBoards called");
         return boardService.getNotices();
     }
 
     @PostMapping
-    public Long createBoard(@PathVariable String memberId, @RequestBody NoticeDTO noticeDTO){
+    public Long createBoard(@RequestBody NoticeDTO noticeDTO){
         log.debug("Method createBoard called");
-        return boardService.createNotice(noticeDTO);
+        Notice notice = new Notice();
+        notice.setTitle(noticeDTO.getTitle());
+        // TODO : memberID (로그인 세션에서 정보 불러와야 함)
+//        notice.setWriter(memberService.getMemberById(memberId));
+        notice.setViews(noticeDTO.getViews());
+        Date date = new Date(System.currentTimeMillis());
+        notice.setDate(date.toString());
+        return boardService.createNotice(notice);
     }
 
     @PutMapping("/{noticeId}")
-    public Long updateBoard(@PathVariable String memberId, @PathVariable long noticeId, @RequestBody NoticeDTO noticeDTO){
+    public Long updateBoard(@PathVariable long noticeId, @RequestBody NoticeDTO noticeDTO){
         log.debug("Method updateBoard called");
-        boardService.updateNotice(noticeId,noticeDTO);
+        // TODO : noticeDTO -> notice -> PUT to DB(repo)
         return noticeId;
     }
 
     @DeleteMapping("/{noticeId}")
-    public Long deleteBoard(@PathVariable String memberId, @PathVariable long noticeId, @RequestBody NoticeDTO noticeDTO){
+    public Long deleteBoard(@PathVariable long noticeId){
         log.debug("Method deleteBoard called");
         boardService.deleteNotice(noticeId);
         return noticeId;
