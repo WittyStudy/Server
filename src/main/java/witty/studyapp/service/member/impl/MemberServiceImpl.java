@@ -3,9 +3,6 @@ package witty.studyapp.service.member.impl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import witty.studyapp.dto.member.MemberLoginDTO;
-import witty.studyapp.dto.member.MemberRegisterDTO;
-import witty.studyapp.dto.util.DtoUtil;
 import witty.studyapp.entity.Member;
 import witty.studyapp.repository.member.MemberRepository;
 import witty.studyapp.service.member.MemberPolicy;
@@ -20,13 +17,12 @@ public class MemberServiceImpl implements MemberService {
 
     private final MemberRepository memberRepository;
     private final MemberPolicy memberPolicy;
-    private final DtoUtil dtoUtil;
 
     @Override
-    public Long register(MemberRegisterDTO memberRegisterDTO) {
-        if(memberPolicy.verifyRegisterDTO(memberRegisterDTO) && !isAlreadyExistIdent(memberRegisterDTO.getIdent())){
+    public Long register(Member member) {
+        if(memberPolicy.verifyMember(member) && !isAlreadyExistEmail(member.getEmail())){
             try {
-                return memberRepository.save(dtoUtil.getByDTO(memberRegisterDTO)).getId();
+                return memberRepository.save(member).getId();
             }catch(Exception e){    // Exception 처리 필요.
                 return 0L;
             }
@@ -36,8 +32,8 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public Object login(Long memberId, MemberLoginDTO memberLoginDTO) {
-        if(verifyMemberLogin(memberId, memberLoginDTO)){
+    public Object login(Long memberId, Member member) {
+        if(verifyMemberLogin(member)){
             return "TOKEN";
         }else {
             return "FALSE";
@@ -71,12 +67,17 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
+    public Member getMemberById(Long id) {
+        return memberRepository.getById(id);
+    }
+
+    @Override
     public List<Member> getAllMembers() {
         return memberRepository.findAll();
     }
 
     @Override
-    public Long deleteMember(long memberId) {
+    public Long deleteMember(Long memberId) {
         try{
             memberRepository.deleteById(memberId);
             return memberId;
@@ -85,13 +86,13 @@ public class MemberServiceImpl implements MemberService {
         }
     }
 
-    private boolean verifyMemberLogin(Long memberId, MemberLoginDTO memberLoginDTO){
-        return memberRepository.findByIdent(memberLoginDTO.getIdent())
-                .map(member -> member.getPassword().equals(memberLoginDTO.getPassword()) && member.getId().equals(memberId))
+    private boolean verifyMemberLogin(Member member){
+        return memberRepository.findById(member.getId())
+                .map(m -> m.getPassword().equals(member.getPassword()))
                 .orElse(false);
     }
 
-    private boolean isAlreadyExistIdent(String ident){
-        return memberRepository.findByIdent(ident).isPresent();
+    private boolean isAlreadyExistEmail(String email){
+        return memberRepository.findByEmail(email).isPresent();
     }
 }

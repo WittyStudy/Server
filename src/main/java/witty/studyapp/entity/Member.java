@@ -18,8 +18,8 @@ public class Member {
     @Column(name = "MEMBER_ID")
     private Long id;
 
-    @Column(name="ident")
-    private String ident;
+    @Column(name="email")
+    private String email;
 
     @Column(name="name")
     private String name;
@@ -27,6 +27,4 @@ public class Member {
     @Column(name="password")
     private String password;
 
-    @Column(name="email")
-    private String email;
 }

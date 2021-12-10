@@ -7,13 +7,12 @@ import org.springframework.data.repository.query.Param;
 import witty.studyapp.entity.Member;
 
 import javax.transaction.Transactional;
-import java.util.List;
 import java.util.Optional;
 
-public interface MemberRepository extends JpaRepository<Member,Long> {
+public interface MemberRepository extends JpaRepository<Member, Long> {
 
-    @Query("SELECT m FROM Member m WHERE m.ident = :ident")
-    Optional<Member> findByIdent(@Param("ident") String ident);
+    @Query("SELECT m FROM Member m WHERE m.id=:id")
+    Optional<Member> findById(@Param("id") Long id);
 
     @Transactional
     @Modifying
@@ -24,4 +23,7 @@ public interface MemberRepository extends JpaRepository<Member,Long> {
     @Modifying
     @Query("UPDATE Member m SET m.password=:password")
     int updatePassword(@Param("password") String password);
+
+    @Query("SELECT m FROM Member m WHERE m.email=:email")
+    Optional<Member> findByEmail(@Param("email") String email);
 }
