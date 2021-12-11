@@ -9,6 +9,7 @@ import witty.studyapp.service.member.MemberPolicy;
 import witty.studyapp.service.member.MemberService;
 
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -32,11 +33,11 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public Object login(Long memberId, Member member) {
+    public Optional<Member> login(Member member) {
         if(verifyMemberLogin(member)){
-            return "TOKEN";
+            return memberRepository.findByEmail(member.getEmail());
         }else {
-            return "FALSE";
+            return Optional.empty();
         }
     }
 
