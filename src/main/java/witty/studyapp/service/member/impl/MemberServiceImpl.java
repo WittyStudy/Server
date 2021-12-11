@@ -25,6 +25,7 @@ public class MemberServiceImpl implements MemberService {
             try {
                 return memberRepository.save(member).getId();
             }catch(Exception e){    // Exception 처리 필요.
+                log.warn("error",e);
                 return 0L;
             }
         }else {
@@ -37,6 +38,7 @@ public class MemberServiceImpl implements MemberService {
         if(verifyMemberLogin(member)){
             return memberRepository.findByEmail(member.getEmail());
         }else {
+            log.info("returned : Optional.empty() in [MemberServiceImpl::login]");
             return Optional.empty();
         }
     }
@@ -88,7 +90,7 @@ public class MemberServiceImpl implements MemberService {
     }
 
     private boolean verifyMemberLogin(Member member){
-        return memberRepository.findById(member.getId())
+        return memberRepository.findByEmail(member.getEmail())
                 .map(m -> m.getPassword().equals(member.getPassword()))
                 .orElse(false);
     }
