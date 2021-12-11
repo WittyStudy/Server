@@ -8,6 +8,7 @@ import witty.studyapp.repository.board.BoardRepository;
 import witty.studyapp.repository.member.MemberRepository;
 import witty.studyapp.service.board.BoardService;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -33,12 +34,16 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
+    public Optional<Notice> getById(Long id){
+        return boardRepository.findById(id);
+    }
+
+    @Override
     public Long updateNotice(Long id, Notice notice) {
         try {
             boardRepository.updateTitle(notice.getTitle(),id);
             boardRepository.updateContent(notice.getContent(),id);
-            boardRepository.updateDate(notice.getDate(),id);
-
+            boardRepository.updateDate(new Date(System.currentTimeMillis()).toString(),id);
             return id;
         }catch(Exception e){    // TODO : Exception 정의 필요.
             return 0L;
