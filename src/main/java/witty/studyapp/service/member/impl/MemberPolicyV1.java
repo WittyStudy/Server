@@ -44,19 +44,21 @@ public class MemberPolicyV1 implements MemberPolicy {
         isEmail = Pattern.matches(
                 "[\\w~\\-.]+@[\\w~\\-]+(\\.[\\w~\\-]+)+",
                 email.trim());
-        return isEmail && isValid(".?",email,MIN_EMAIL_LENGTH, MAX_EMAIL_LENGTH);
+        boolean valid = email.length() >= MIN_EMAIL_LENGTH && email.length() <= MAX_EMAIL_LENGTH;
+        return isEmail && valid;
     }
 
     /**
      * Name 정책 : Only 영문
      * MIN_ID_LENGTH <= {length} <= MAX_ID_LENGTH
      */
+
     @Override
     public boolean isValidName(String name) {
         return isValid("[a-zA-Z]*$", name, MIN_NAME_LENGTH, MAX_NAME_LENGTH);
     }
 
-    private boolean isValid(String regex, String string, int min, int max) {
+    public boolean isValid(String regex, String string, int min, int max) {
         return string.matches(regex) &&
                 string.length() >= min &&
                 string.length() <= max;
