@@ -3,11 +3,18 @@ package witty.studyapp.controller.member;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
+import witty.studyapp.annotation.Login;
+import witty.studyapp.constant.comment.CommentOption;
 import witty.studyapp.dto.comment.CommentDTO;
 import witty.studyapp.entity.Comment;
+import witty.studyapp.entity.Member;
+import witty.studyapp.execption.NotSupportedOptionException;
+import witty.studyapp.execption.RequiredAdditionalInformationException;
 import witty.studyapp.service.comment.CommentService;
 
 import java.util.List;
+
+import static witty.studyapp.constant.comment.CommentOption.*;
 
 @Slf4j
 @RestController
@@ -22,14 +29,18 @@ public class CommentController {
         return "OK";
     }
 
-    @GetMapping("/members/{memberId}")
-    public List<Comment> getCommentsByMemberId(@PathVariable Long memberId){
-        return commentService.getCommentsByMemberId(memberId);
-    }
-
-    @GetMapping("/boards/{boardId}")
-    public List<Comment> getCommentsByBoardId(@PathVariable Long boardId){
-        return commentService.getCommentsByBoardId(boardId);
+    @GetMapping("/{option}/{id}")
+    public List<Comment> getCommentsByMemberId(@Login Member loginMember, @PathVariable String option, @PathVariable(required = false) Long id){
+        if(option.equals(BY_USER_ID)){
+            return commentService.getCommentsByMemberId(loginMember.getId());
+        }else if(option.equals(BY_BOARD_ID)){
+            if(id == null) {
+                throw new RequiredAdditionalInformationException("BOARD ID값이 필요합니다.");
+            }
+            return commentService.getCommentsByBoardId(id);
+        }else{
+            throw new NotSupportedOptionException("존재하지 않는 option 입니다.");
+        }
     }
 
     @PostMapping("/members/{memberId}/boards/{boardId}")
