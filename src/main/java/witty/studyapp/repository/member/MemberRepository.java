@@ -15,14 +15,14 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
     Optional<Member> findById(@Param("id") Long id);
 
     @Transactional
-    @Modifying
-    @Query("UPDATE Member m SET m.name=:name")
-    int updateName(@Param("name") String name);
+    @Modifying(clearAutomatically = true)
+    @Query("UPDATE Member m SET m.name=:name WHERE m.id=:id")
+    void updateName(@Param("id") Long id, @Param("name") String name);
 
     @Transactional
-    @Modifying
-    @Query("UPDATE Member m SET m.password=:password")
-    int updatePassword(@Param("password") String password);
+    @Modifying(clearAutomatically = true)
+    @Query("UPDATE Member m SET m.password=:password WHERE m.id=:id")
+    void updatePassword(@Param("id") Long id, @Param("password") String password);
 
     @Query("SELECT m FROM Member m WHERE m.email=:email")
     Optional<Member> findByEmail(@Param("email") String email);

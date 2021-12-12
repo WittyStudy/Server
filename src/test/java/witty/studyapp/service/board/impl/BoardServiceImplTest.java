@@ -1,5 +1,6 @@
 package witty.studyapp.service.board.impl;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -35,6 +36,7 @@ class BoardServiceImplTest {
     }
 
     @Test
+    @DisplayName("게시물 작성 및 게시물 ID로 조회 서비스 테스트")
     void createNoticeAndGetById() {
         Member member = addTestUser();
         Notice notice = new Notice();
@@ -50,6 +52,7 @@ class BoardServiceImplTest {
     }
 
     @Test
+    @DisplayName("게시물 다수 조회 테스트. 개수 변경만 확인.")
     void getNotices() {
         Member member = addTestUser();
         int prev = boardService.getNotices().size();
@@ -66,6 +69,7 @@ class BoardServiceImplTest {
     }
 
     @Test
+    @DisplayName("게시물 내용, 타이틀 변경 서비스 테스트")
     void updateNotice() {
         Member member = addTestUser();
         Notice notice = new Notice();
@@ -89,6 +93,7 @@ class BoardServiceImplTest {
     }
 
     @Test
+    @DisplayName("게시물 ID로 특정 게시물 삭제 서비스 테스트")
     void deleteNotice() {
         int prev = boardService.getNotices().size();
 

@@ -47,7 +47,7 @@ public class MemberServiceImpl implements MemberService {
     public Long updateMemberName(Long memberId, String name) {
         return memberRepository.findById(memberId).map(member -> {
             if(memberPolicy.isValidName(name)) {
-                memberRepository.updateName(name);
+                memberRepository.updateName(member.getId(), name);
                 return member.getId();
             }else{
                 log.debug("memberId:'{}' is failed to update name:'{}'",memberId,name);
@@ -60,7 +60,7 @@ public class MemberServiceImpl implements MemberService {
     public Long updateMemberPassword(Long memberId, String password) {
         return memberRepository.findById(memberId).map(member -> {
             if(memberPolicy.isValidPassword(password)) {
-                memberRepository.updatePassword(password);
+                memberRepository.updatePassword(member.getId(), password);
                 return member.getId();
             }else{
                 log.debug("memberId:'{}' is failed to update password:'{}'",memberId,password);

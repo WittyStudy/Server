@@ -3,12 +3,13 @@ package witty.studyapp.service.comment.impl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import witty.studyapp.entity.Comment;
+import witty.studyapp.execption.NoSuchBoardException;
+import witty.studyapp.execption.NotFoundUserException;
 import witty.studyapp.repository.board.BoardRepository;
 import witty.studyapp.repository.comment.CommentRepository;
 import witty.studyapp.repository.member.MemberRepository;
 import witty.studyapp.service.comment.CommentService;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,22 +23,12 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public List<Comment> getCommentsByBoardId(Long boardId) {
-        try {
-            return boardRepository.findById(boardId).map(commentRepository::findByBoard)
-                    .orElse(new ArrayList<>());
-        }catch(Exception e){    // Exception 처리 필요
-            return new ArrayList<>();
-        }
+        return boardRepository.findById(boardId).map(commentRepository::findByBoard).orElseThrow(() -> new NoSuchBoardException("게시글이 존재하지 않습니다."));
     }
 
     @Override
-    public List<Comment> getCommentsByMemberId(Long memberId) {
-        try {
-            return memberRepository.findById(memberId).map(commentRepository::findByMember)
-                    .orElse(new ArrayList<>());
-        }catch(Exception e){        // Exception 처리 필요.
-            return new ArrayList<>();
-        }
+    public List<Comment> getCommentsByMemberId(Long memberId) throws NotFoundUserException {
+        return memberRepository.findById(memberId).map(commentRepository::findByMember).orElseThrow(() -> new NotFoundUserException("해당 사용자를 찾을 수 없습니다"));
     }
 
     @Override
@@ -50,7 +41,7 @@ public class CommentServiceImpl implements CommentService {
                     return comment.getId();
                 }).orElse(0L);
             }).orElse(0L);
-        }catch(Exception e){    // Exception 정의 필요.
+        } catch (Exception e) {    // Exception 정의 필요.
             return 0L;
         }
     }
@@ -60,7 +51,7 @@ public class CommentServiceImpl implements CommentService {
         try {
             commentRepository.deleteById(commentId);
             return commentId;
-        }catch(Exception e){    // Exception 정의 필요.
+        } catch (Exception e) {    // Exception 정의 필요.
             return 0L;
         }
     }
@@ -73,7 +64,7 @@ public class CommentServiceImpl implements CommentService {
                 c.setContent(comment.getContent());
                 return commentId;
             }).orElse(0L);
-        }catch(Exception e){
+        } catch (Exception e) {
             return 0L;
         }
     }

@@ -9,6 +9,7 @@ import witty.studyapp.dto.comment.CommentResponseDTO;
 import witty.studyapp.dto.comment.CommentUpdateDTO;
 import witty.studyapp.entity.Comment;
 import witty.studyapp.entity.Member;
+import witty.studyapp.execption.NotFoundUserException;
 import witty.studyapp.execption.NotSupportedOptionException;
 import witty.studyapp.execption.RequiredAdditionalInformationException;
 import witty.studyapp.service.comment.CommentService;
@@ -32,7 +33,7 @@ public class CommentController {
     }
 
     @GetMapping("/{option}/{id}")
-    public List<CommentResponseDTO> getCommentsByMemberId(@Login Member loginMember, @PathVariable String option, @PathVariable(required = false) Long id){
+    public List<CommentResponseDTO> getCommentsByMemberId(@Login Member loginMember, @PathVariable String option, @PathVariable(required = false) Long id) throws NotFoundUserException {
         if(option.equals(BY_USER_ID)){
             return getCommentResponseDTOs(commentService.getCommentsByMemberId(loginMember.getId()));
         }else if(option.equals(BY_BOARD_ID)){
