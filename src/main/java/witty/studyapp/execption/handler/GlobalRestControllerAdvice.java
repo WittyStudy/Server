@@ -9,7 +9,7 @@ import witty.studyapp.execption.*;
 import witty.studyapp.execption.result.ErrorResult;
 
 @Slf4j
-@RestControllerAdvice
+@RestControllerAdvice(basePackages = "witty.study")
 public class GlobalRestControllerAdvice {
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
