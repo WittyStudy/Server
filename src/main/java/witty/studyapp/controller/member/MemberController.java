@@ -10,7 +10,6 @@ import witty.studyapp.dto.member.MemberLoginDTO;
 import witty.studyapp.dto.member.MemberRegisterDTO;
 import witty.studyapp.entity.Member;
 import witty.studyapp.execption.LoginArgumentException;
-import witty.studyapp.execption.NotLoginMemberException;
 import witty.studyapp.execption.RegisterArgumentException;
 import witty.studyapp.service.member.MemberService;
 
@@ -79,12 +78,8 @@ public class MemberController {
     }
 
     @PostMapping("/logout")
-    public String logout(@Login Member loginMember, HttpServletRequest request){
-        if(loginMember == null){
-            throw new NotLoginMemberException("세션이 유효하지 않습니다.");
-        }
-
-        request.getSession().setMaxInactiveInterval(0);
+    public String logout(HttpServletRequest request){
+        request.getSession(false).invalidate();
         return "OK";
     }
 
