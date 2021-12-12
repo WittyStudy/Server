@@ -11,7 +11,6 @@ import witty.studyapp.execption.NoAuthorizationException;
 import witty.studyapp.execption.NoSuchBoardException;
 import witty.studyapp.execption.NotLoginMemberException;
 import witty.studyapp.service.board.BoardService;
-import witty.studyapp.service.member.MemberService;
 
 import java.util.Date;
 import java.util.List;
@@ -25,7 +24,6 @@ public class BoardController {
     //   (member login, register 외엔 인터셉터를 적용하고, member 정보를 받아 와야 함)
 
     private final BoardService boardService;
-    private final MemberService memberService;
 
     @GetMapping
     public List<Notice> getBoards(){
