@@ -33,7 +33,7 @@ public class MemberController {
      *
      * @return All members
      */
-    @GetMapping
+    @GetMapping("/test")
     public List<Member> test() {
         return memberService.getAllMembers();
     }
@@ -98,7 +98,7 @@ public class MemberController {
         return memberService.updateMemberPassword(loginMember.getId(), password);
     }
 
-    @DeleteMapping("/")
+    @DeleteMapping
     public Long deleteMemberById(@Login Member loginMember) {
         return memberService.deleteMember(loginMember.getId());
     }
