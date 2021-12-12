@@ -1,6 +1,16 @@
 # Witty Study Server Project
 
-Spring MVC gradle jar project.
+### Spring Server Project for Group Study Application:: WittyStudy
+
+### ENVIRONMENT
+
+jasypt_encryptor_password="SECRET"
+
+### SESSION
+
+server offers JSESSIONID
+
+Every request require JSESSIONID except for "/register", "/login", "/logout", "**/test" 
 
 ----------------------------------------
 
@@ -27,41 +37,42 @@ Spring MVC gradle jar project.
 - register
 ```
 method:	    "POST"
-path:	    "/members"
+path:	    "/members/register"
 require:    application/json (MemberRegisterDTO)
 ```
 
 - login
 ```
 method:     "POST"
-path:	    "/members/{memberId}
+path:	    "/members/login
 require:    application/json (MemberLoginDTO)
+offer:      JSESSIONID (Set-Cookie)
 ```
 
 - update-name
 ```
 method:     "PATCH"
-path:	    "/members/{memberId}/update/name
+path:	    "/members/name
 require:    text (String)
 ```
 
 - update-password
 ```
 method:     "PATCH"
-path:	    "/members/{memberId}/update/password
+path:	    "/members/password
 require:    text (String)
 ```
 
 - delete
 ```
 method:	    "DELETE"
-path:	    "/members/{memberId}"
+path:	    "/members"
 ```
 
 - test api
 ```
 method:	    "GET"
-path:	    "/members"
+path:	    "/members/test"
 ```
 
 ### <a name="BoardAPI">1.2. Board API </a>
@@ -70,7 +81,7 @@ path:	    "/members"
 
 ```
 method:	    "POST"
-path:	    "/members/{memberId}/boards"
+path:	    "/boards"
 require:    application/json (NoticeDTO)
 ```
 
@@ -78,14 +89,15 @@ require:    application/json (NoticeDTO)
 
 ```
 method:	    "GET"
-path:	    "/members/{memberId}/boards"
+path:	    "/boards"
+response:   application/json (List<BoardResponseDTO>)
 ```
 
 - update board
 
 ```
-method:	    "PUT"
-path:	    "/members/{memberId}/boards/{noticeId}"
+method:	    "PATCH"
+path:	    "/boards/{noticeId}"
 require:    application/json (NoticeDTO)
 ```
 
@@ -93,8 +105,7 @@ require:    application/json (NoticeDTO)
 
 ```
 method:	    "DELETE"
-path:	    "/members/{memberId}/boards/{noticeId}"
-require:    application/json (NoticeDTO)
+path:	    "/boards/{noticeId}"
 ```
 
 ### <a name="CommentAPI">1.3. Comment API </a>
@@ -102,27 +113,24 @@ require:    application/json (NoticeDTO)
 - create comment
 ```
 method:     "POST"
-path:       "/comments/members/{memberId}/boards/{boardId}"
-require:    application/json (CommentDTO)
+path:       "/comments"
+require:    application/json (CommentCreateDTO)
+
 ```
 
-- get comments by memberID
+- get comments
 ```
 method:     "GET"
-path:       "/comments/members/{memberId}
-```
-
-- get comments by boardId
-```
-method:     "GET"
-path:       "/comments/boards/{boardId}
+path:       "/comments/{option}/{id}"
+options:    "user" || "board" (board requires "id" path variable)
+response:    application/json (List<CommentResponseDTO>)
 ```
 
 - update comment
 ```
 method:     "PATCH"
-path:       "/comments/{commentId}"
-required:   application/json (CommentDTO)
+path:       "/comments"
+required:   application/json (CommentUpdateDTO)
 ```
 
 - delete comment
@@ -140,16 +148,15 @@ path:       "/comments/{commentId}"
 - MemberRegisterDTO
 
 ```
-String  ident
 String  name
-String  password
 String  email
+String  password
 ```
 
 
 - MemberLoginDTO
 ```
-String  ident
+String  email
 String  password
 ```
 

@@ -4,8 +4,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 import witty.studyapp.annotation.Login;
-import witty.studyapp.constant.comment.CommentOption;
-import witty.studyapp.dto.comment.CommentDTO;
+import witty.studyapp.dto.comment.CommentCreateDTO;
+import witty.studyapp.dto.comment.CommentUpdateDTO;
 import witty.studyapp.entity.Comment;
 import witty.studyapp.entity.Member;
 import witty.studyapp.execption.NotSupportedOptionException;
@@ -43,16 +43,18 @@ public class CommentController {
         }
     }
 
-    @PostMapping("/members/{memberId}/boards/{boardId}")
-    public Long createComment(@RequestBody CommentDTO commentDTO, @PathVariable Long memberId, @PathVariable Long boardId){
+    @PostMapping
+    public Long createComment(@Login Member loginMember, @RequestBody CommentCreateDTO commentCreateDTO){
         Comment comment = new Comment();
-        comment.setContent(commentDTO.getContent());
-        return commentService.createComment(comment, memberId, boardId);
+        comment.setContent(commentCreateDTO.getContent());
+        return commentService.createComment(comment, loginMember.getId(), commentCreateDTO.getBoardId());
     }
 
-    @PatchMapping("/{commentId}")
-    public Long updateCommentContext(@RequestBody Comment comment, @PathVariable Long commentId){
-        return commentService.updateComment(comment,commentId);
+    @PatchMapping
+    public Long updateCommentContext(@RequestBody CommentUpdateDTO commentUpdateDTO){
+        Comment comment = new Comment();
+        comment.setContent(commentUpdateDTO.getContent());
+        return commentService.updateComment(comment, commentUpdateDTO.getCommentId());
     }
 
     @DeleteMapping("/{commentId}")
