@@ -148,8 +148,8 @@ path:       "/comments/{commentId}"
 - MemberRegisterDTO
 
 ```
-String  name
 String  email
+String  name
 String  password
 ```
 
@@ -165,15 +165,38 @@ String  password
 - NoticeDTO
 ```
 String  title
-Long    writerId
-Long    views
-String  date    (format:"yyyy-MM-dd kk:mm:ss")
 String  content
+```
+
+
+- NoticeResponseDTO
+```
+String  title
+String  writerName
+Long    views
+String  date
 ```
 
 ### <a name="CommentDTO">2.3. Comment DTO</a>
 
-- CommentDTO
+- CommentCreateDTO
 ```
+Long    boardId
 String  content
 ```
+
+
+- CommentUpdateDTO
+```
+Long    commentId
+String  content
+```
+
+
+- CommentResponseDTO
+```
+String  content
+String  writerName
+String  boardTitle
+```
+
