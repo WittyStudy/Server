@@ -68,30 +68,29 @@ class BoardServiceImplTest {
         assertThat(notices.size()).isEqualTo(prev + 5);
     }
 
-    // TODO : PASS
-//    @Test
-//    @DisplayName("게시물 내용, 타이틀 변경 서비스 테스트")
-//    void updateNotice() {
-//        Member member = addTestUser();
-//        Notice notice = new Notice();
-//        notice.setContent("CONTENT");
-//        notice.setTitle("TITLE");
-//        notice.setWriter(member);
-//        notice.setDate(new Date(System.currentTimeMillis()).toString());
-//        boardService.createNotice(notice);
-//
-//        Notice to = new Notice();
-//        to.setContent("newc");
-//        to.setTitle("newt");
-//
-//        boardService.updateNotice(notice.getId(), to);
-//        Optional<Notice> byId = boardService.getById(notice.getId());
-//        assertThat(byId.isPresent()).isTrue();
-//        String title = byId.get().getTitle();
-//        String content = byId.get().getContent();
-//        assertThat(title).isLessThanOrEqualTo("newc");
-//        assertThat(content).isLessThanOrEqualTo("newt");
-//    }
+    @Test
+    @DisplayName("게시물 내용, 타이틀 변경 서비스 테스트")
+    void updateNotice() {
+        Member member = addTestUser();
+        Notice notice = new Notice();
+        notice.setContent("CONTENT");
+        notice.setTitle("TITLE");
+        notice.setWriter(member);
+        notice.setDate(new Date(System.currentTimeMillis()).toString());
+        boardService.createNotice(notice);
+
+        Notice to = new Notice();
+        to.setContent("newc");
+        to.setTitle("newt");
+
+        boardService.updateNotice(notice.getId(), to);
+        Optional<Notice> byId = boardService.getById(notice.getId());
+        assertThat(byId.isPresent()).isTrue();
+        String title = byId.get().getTitle();
+        String content = byId.get().getContent();
+        assertThat(content).isLessThanOrEqualTo("newc");
+        assertThat(title).isLessThanOrEqualTo("newt");
+    }
 
     @Test
     @DisplayName("게시물 ID로 특정 게시물 삭제 서비스 테스트")
