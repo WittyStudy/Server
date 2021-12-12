@@ -23,37 +23,34 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public List<Comment> getCommentsByBoardId(Long boardId) {
-        return boardRepository.findById(boardId).map(commentRepository::findByBoard).orElseThrow(() -> new NoSuchBoardException("게시글이 존재하지 않습니다."));
+        return boardRepository.findById(boardId).map(commentRepository::findByBoard)
+                .orElseThrow(() -> {
+                    throw new NoSuchBoardException("게시글이 존재하지 않습니다.");
+                });
     }
 
     @Override
-    public List<Comment> getCommentsByMemberId(Long memberId) throws NotFoundUserException {
-        return memberRepository.findById(memberId).map(commentRepository::findByMember).orElseThrow(() -> new NotFoundUserException("해당 사용자를 찾을 수 없습니다"));
+    public List<Comment> getCommentsByMemberId(Long memberId) {
+        return memberRepository.findById(memberId).map(commentRepository::findByMember)
+                .orElseThrow(() -> new NotFoundUserException("해당 사용자를 찾을 수 없습니다"));
     }
 
     @Override
     public Long createComment(Comment comment, Long memberId, Long boardId) {
-        try {
-            return memberRepository.findById(memberId).map(member -> {
-                comment.setWriter(member);
-                return boardRepository.findById(boardId).map(notice -> {
-                    comment.setNotice(notice);
-                    return comment.getId();
-                }).orElse(0L);
+        return memberRepository.findById(memberId).map(member -> {
+            comment.setWriter(member);
+            return boardRepository.findById(boardId).map(notice -> {
+                comment.setNotice(notice);
+                commentRepository.save(comment);
+                return comment.getId();
             }).orElse(0L);
-        } catch (Exception e) {    // Exception 정의 필요.
-            return 0L;
-        }
+        }).orElse(0L);
     }
 
     @Override
     public Long deleteComment(long commentId) {
-        try {
-            commentRepository.deleteById(commentId);
-            return commentId;
-        } catch (Exception e) {    // Exception 정의 필요.
-            return 0L;
-        }
+        commentRepository.deleteById(commentId);
+        return commentId;
     }
 
     @Override
