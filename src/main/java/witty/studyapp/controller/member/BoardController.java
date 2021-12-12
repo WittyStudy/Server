@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 import witty.studyapp.annotation.Login;
 import witty.studyapp.dto.board.NoticeDTO;
+import witty.studyapp.dto.board.NoticeResponseDTO;
 import witty.studyapp.entity.Member;
 import witty.studyapp.entity.Notice;
 import witty.studyapp.execption.NoAuthorizationException;
@@ -12,6 +13,7 @@ import witty.studyapp.execption.NoSuchBoardException;
 import witty.studyapp.execption.NotLoginMemberException;
 import witty.studyapp.service.board.BoardService;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -26,9 +28,18 @@ public class BoardController {
     private final BoardService boardService;
 
     @GetMapping
-    public List<Notice> getBoards(){
+    public List<NoticeResponseDTO> getBoards(){
         log.debug("Method getBoards called");
-        return boardService.getNotices();
+        return getNoticeResponseDTOs(boardService.getNotices());
+    }
+
+    private List<NoticeResponseDTO> getNoticeResponseDTOs(List<Notice> notices) {
+        List<NoticeResponseDTO> result = new ArrayList<>();
+        for (Notice notice : notices) {
+            NoticeResponseDTO noticeResponseDTO = new NoticeResponseDTO(notice.getTitle(),notice.getWriter().getName(), notice.getViews(), notice.getDate());
+            result.add(noticeResponseDTO);
+        }
+        return result;
     }
 
     @PostMapping
