@@ -17,15 +17,10 @@ import java.util.Optional;
 public class BoardServiceImpl implements BoardService {
 
     private final BoardRepository boardRepository;
-    private final MemberRepository memberRepository;
 
     @Override
     public Long createNotice(Notice notice) {
-        Optional<Member> optionalMember = memberRepository.findById(notice.getWriter().getId());
-        return optionalMember.map(member -> {
-            notice.setWriter(member);
-            return boardRepository.save(notice).getId();
-        }).orElse(0L);
+        return boardRepository.save(notice).getId();
     }
 
     @Override

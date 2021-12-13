@@ -53,8 +53,8 @@ public class BoardController {
         notice.setTitle(noticeDTO.getTitle());
         notice.setWriter(loginMember);
         notice.setContent(noticeDTO.getContent());
-        Date date = new Date(System.currentTimeMillis());
-        notice.setDate(date.toString());
+        notice.setDate(new Date(System.currentTimeMillis()).toString());
+        notice.setViews(0L);
         return boardService.createNotice(notice);
     }
 

@@ -7,6 +7,7 @@ import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 import witty.studyapp.annotation.Login;
 import witty.studyapp.dto.member.MemberLoginDTO;
+import witty.studyapp.entity.Member;
 import witty.studyapp.execption.NotLoginMemberException;
 
 import javax.servlet.http.HttpServletRequest;
@@ -19,7 +20,7 @@ public class LoginMemberArgumentResolver implements HandlerMethodArgumentResolve
     @Override
     public boolean supportsParameter(MethodParameter parameter) {
         boolean hasLoginAnnotation = parameter.hasParameterAnnotation(Login.class);
-        boolean hasMemberType = MemberLoginDTO.class.isAssignableFrom(parameter.getParameterType());
+        boolean hasMemberType = Member.class.isAssignableFrom(parameter.getParameterType());
         return hasLoginAnnotation && hasMemberType;
     }
 
