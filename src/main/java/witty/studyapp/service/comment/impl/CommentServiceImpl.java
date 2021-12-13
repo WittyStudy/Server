@@ -22,6 +22,11 @@ public class CommentServiceImpl implements CommentService {
     private final CommentRepository commentRepository;
 
     @Override
+    public List<Comment> getAllComments() {
+        return commentRepository.findAll();
+    }
+
+    @Override
     public List<Comment> getCommentsByBoardId(Long boardId) {
         return boardRepository.findById(boardId).map(commentRepository::findByBoard)
                 .orElseThrow(() -> {

@@ -12,6 +12,13 @@ server offers JSESSIONID
 
 Every request require JSESSIONID except for "/register", "/login", "/logout", "**/test" 
 
+
+### TEST
+
+/test(GET)              : simple api test
+/test/create/{number}   : create test data
+/test/clear             : clear all data
+
 ----------------------------------------
 
 ## 0. Index

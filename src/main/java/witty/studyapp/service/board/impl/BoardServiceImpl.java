@@ -2,10 +2,8 @@ package witty.studyapp.service.board.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import witty.studyapp.entity.Member;
 import witty.studyapp.entity.Notice;
 import witty.studyapp.repository.board.BoardRepository;
-import witty.studyapp.repository.member.MemberRepository;
 import witty.studyapp.service.board.BoardService;
 
 import java.util.Date;
