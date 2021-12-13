@@ -1,4 +1,4 @@
-package witty.studyapp;
+package witty.studyapp.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
@@ -17,7 +17,7 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addInterceptor(new LoginCheckInterceptor())
                 .order(1)
                 .addPathPatterns("/**")
-                .excludePathPatterns("/members/register", "/members/login", "/members/logout");
+                .excludePathPatterns("/members/register", "/members/login", "/members/logout", "/test/**");
     }
 
     @Override
