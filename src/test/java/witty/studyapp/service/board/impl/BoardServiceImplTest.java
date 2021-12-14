@@ -26,7 +26,7 @@ class BoardServiceImplTest {
     @Autowired
     MemberService memberService;
 
-    Member addTestUser(){
+    Member addTestUser() {
         Member member = new Member();
         member.setEmail("test@naver.com");
         member.setPassword("secret!secret");
@@ -58,8 +58,8 @@ class BoardServiceImplTest {
         int prev = boardService.getNotices().size();
         for (int i = 0; i < 5; i++) {
             Notice notice = new Notice();
-            notice.setContent("CONTENT#"+(i+1));
-            notice.setTitle("TITLE#"+(i+1));
+            notice.setContent("CONTENT#" + (i + 1));
+            notice.setTitle("TITLE#" + (i + 1));
             notice.setWriter(member);
             notice.setDate(new Date(System.currentTimeMillis()).toString());
             boardService.createNotice(notice);
@@ -107,5 +107,23 @@ class BoardServiceImplTest {
         boardService.deleteNotice(notice.getId());
         List<Notice> notices = boardService.getNotices();
         assertThat(notices.size()).isEqualTo(prev);
+    }
+
+    @Test
+    @DisplayName("Title로 게시글 조회 서비스 테스트")
+    void searchByTitleTest() {
+        int prev = boardService.getNoticesByTitle("HELLO").size();
+        Member member = addTestUser();
+
+        for (int i = 0; i < 5; i++) {
+            Notice notice = new Notice();
+            notice.setContent("CONTENT" + (i + 1) + (i % 2 == 1 ? "HELLO" : "HI"));
+            notice.setTitle("TITLE" + (i + 1) + (i % 2 == 1 ? "HELLO" : "HI"));
+            notice.setWriter(member);
+            notice.setDate(new Date(System.currentTimeMillis()).toString());
+            boardService.createNotice(notice);
+        }
+        assertThat(boardService.getNoticesByTitle("HELLO").size()-prev).isEqualTo(2);
+        assertThat(boardService.getNoticesByTitle("HI").size()-prev).isEqualTo(3);
     }
 }

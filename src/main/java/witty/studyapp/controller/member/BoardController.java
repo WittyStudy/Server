@@ -33,6 +33,11 @@ public class BoardController {
         return getNoticeResponseDTOs(boardService.getNotices());
     }
 
+    @GetMapping("/title/{query}")
+    public List<NoticeResponseDTO> getBoardsByTitleName(@PathVariable String query){
+        return getNoticeResponseDTOs(boardService.getNoticesByTitle(query));
+    }
+
     private List<NoticeResponseDTO> getNoticeResponseDTOs(List<Notice> notices) {
         List<NoticeResponseDTO> result = new ArrayList<>();
         for (Notice notice : notices) {

@@ -11,4 +11,5 @@ public interface BoardService {
     Optional<Notice> getById(Long id);
     Long updateNotice(Long id, Notice notice);
     Long deleteNotice(Long noticeId);
+    List<Notice> getNoticesByTitle(String title);
 }

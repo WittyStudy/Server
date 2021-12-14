@@ -100,6 +100,15 @@ path:	    "/boards"
 response:   application/json (List<BoardResponseDTO>)
 ```
 
+- get boards by title
+
+```
+method:     "GET"
+path:       "/boards/title/{query}
+require:    String(query)
+response:   application/json (List<BoardResponseDTO>)
+```
+
 - update board
 
 ```

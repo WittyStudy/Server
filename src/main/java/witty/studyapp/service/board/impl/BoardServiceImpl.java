@@ -9,6 +9,7 @@ import witty.studyapp.service.board.BoardService;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -27,18 +28,26 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
-    public Optional<Notice> getById(Long id){
+    public List<Notice> getNoticesByTitle(String title) {
+        return boardRepository.findAll()
+                .stream()
+                .filter(board -> board.getTitle().contains(title))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public Optional<Notice> getById(Long id) {
         return boardRepository.findById(id);
     }
 
     @Override
     public Long updateNotice(Long id, Notice notice) {
         try {
-            boardRepository.updateTitle(notice.getTitle(),id);
-            boardRepository.updateContent(notice.getContent(),id);
-            boardRepository.updateDate(new Date(System.currentTimeMillis()).toString(),id);
+            boardRepository.updateTitle(notice.getTitle(), id);
+            boardRepository.updateContent(notice.getContent(), id);
+            boardRepository.updateDate(new Date(System.currentTimeMillis()).toString(), id);
             return id;
-        }catch(Exception e){    // TODO : Exception 정의 필요.
+        } catch (Exception e) {    // TODO : Exception 정의 필요.
             return 0L;
         }
     }
@@ -48,7 +57,7 @@ public class BoardServiceImpl implements BoardService {
         try {
             boardRepository.deleteById(noticeId);
             return noticeId;
-        }catch(Exception e){    // Exception 정의 필요.
+        } catch (Exception e) {    // Exception 정의 필요.
             return 0L;
         }
     }
