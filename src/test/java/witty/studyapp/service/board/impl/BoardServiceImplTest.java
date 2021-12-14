@@ -123,7 +123,27 @@ class BoardServiceImplTest {
             notice.setDate(new Date(System.currentTimeMillis()).toString());
             boardService.createNotice(notice);
         }
-        assertThat(boardService.getNoticesByTitle("HELLO").size()-prev).isEqualTo(2);
-        assertThat(boardService.getNoticesByTitle("HI").size()-prev).isEqualTo(3);
+        assertThat(boardService.getNoticesByTitle("HELLO").size() - prev).isEqualTo(2);
+        assertThat(boardService.getNoticesByTitle("HI").size() - prev).isEqualTo(3);
+    }
+
+    @Test
+    @DisplayName("NoticeResponseDTO 에서 Id 전송 여부 확인")
+    void sendNoticeIdTest() {
+        Member member = addTestUser();
+
+        int prev = boardService.getNoticesByTitle("TITLE").size();
+
+        Notice notice = new Notice();
+        notice.setContent("CONTENT");
+        notice.setTitle("TITLE");
+        notice.setWriter(member);
+        notice.setDate(new Date(System.currentTimeMillis()).toString());
+        boardService.createNotice(notice);
+
+        List<Notice> notices = boardService.getNoticesByTitle("TITLE");
+        assertThat(notices.size()).isEqualTo(prev + 1);
+        assertThat(notices.get(0).getId()).isNotNull();
+        assertThat(notices.get(0).getId()).isGreaterThan(0L);
     }
 }
