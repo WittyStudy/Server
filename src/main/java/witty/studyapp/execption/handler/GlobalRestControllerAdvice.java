@@ -9,7 +9,7 @@ import witty.studyapp.execption.*;
 import witty.studyapp.execption.result.ErrorResult;
 
 @Slf4j
-@RestControllerAdvice(basePackages = "witty.study")
+@RestControllerAdvice(basePackages = "witty.studyapp")
 public class GlobalRestControllerAdvice {
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
@@ -39,6 +39,7 @@ public class GlobalRestControllerAdvice {
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     @ExceptionHandler(NotLoginMemberException.class)
     public ErrorResult exceptionHandler(NotLoginMemberException e){
+        log.info("return ErrorResult");
         return new ErrorResult(e);
     }
 
