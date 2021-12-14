@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 import witty.studyapp.annotation.Login;
 import witty.studyapp.dto.board.NoticeDTO;
+import witty.studyapp.dto.board.NoticeDetailDTO;
 import witty.studyapp.dto.board.NoticeResponseDTO;
 import witty.studyapp.entity.Member;
 import witty.studyapp.entity.Notice;
@@ -33,6 +34,14 @@ public class BoardController {
         return getNoticeResponseDTOs(boardService.getNotices());
     }
 
+    @GetMapping("/{noticeId}")
+    public NoticeDetailDTO getBoardDetail(@PathVariable Long noticeId){
+        return getNoticeDetailDTO(
+                boardService.getById(noticeId)
+                        .orElseThrow(()-> new NoSuchBoardException("해당 게시글이 존재하지 않습니다."))
+        );
+    }
+
     @GetMapping("/title/{query}")
     public List<NoticeResponseDTO> getBoardsByTitleName(@PathVariable String query){
         return getNoticeResponseDTOs(boardService.getNoticesByTitle(query));
@@ -41,10 +50,14 @@ public class BoardController {
     private List<NoticeResponseDTO> getNoticeResponseDTOs(List<Notice> notices) {
         List<NoticeResponseDTO> result = new ArrayList<>();
         for (Notice notice : notices) {
-            NoticeResponseDTO noticeResponseDTO = new NoticeResponseDTO(notice.getTitle(),notice.getWriter().getName(), notice.getViews(), notice.getDate());
+            NoticeResponseDTO noticeResponseDTO = new NoticeResponseDTO(notice.getId(),notice.getTitle(),notice.getWriter().getName(), notice.getViews(), notice.getDate());
             result.add(noticeResponseDTO);
         }
         return result;
+    }
+
+    private NoticeDetailDTO getNoticeDetailDTO(Notice notice) {
+        return new NoticeDetailDTO(notice.getId(), notice.getTitle(), notice.getWriter().getName(), notice.getViews(), notice.getDate(), notice.getContent());
     }
 
     @PostMapping
