@@ -41,6 +41,12 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
+    public Optional<Notice> viewNoticeDetailAndGet(Long id) {
+        boardRepository.incrementView(id);
+        return boardRepository.findById(id);
+    }
+
+    @Override
     public Long updateNotice(Long id, Notice notice) {
         try {
             boardRepository.updateTitle(notice.getTitle(), id);

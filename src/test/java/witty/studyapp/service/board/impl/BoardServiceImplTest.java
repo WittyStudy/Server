@@ -146,4 +146,26 @@ class BoardServiceImplTest {
         assertThat(notices.get(0).getId()).isNotNull();
         assertThat(notices.get(0).getId()).isGreaterThan(0L);
     }
+
+    @Test
+    @DisplayName("게시글 조회수 증가 확인")
+    void viewIncreaseTest() {
+        Member member = addTestUser();
+
+        Notice notice = new Notice();
+        notice.setContent("CONTENT");
+        notice.setTitle("TITLE");
+        notice.setWriter(member);
+        notice.setDate(new Date(System.currentTimeMillis()).toString());
+        notice.setViews(123L);
+        boardService.createNotice(notice);
+
+        for (int i = 0; i < 5; i++) {
+            boardService.viewNoticeDetailAndGet(notice.getId());
+        }
+        Optional<Notice> find = boardService.getById(notice.getId());
+        assertThat(find.isPresent()).isEqualTo(true);
+        Notice getNotice = find.get();
+        assertThat(getNotice.getViews()).isEqualTo(123 + 5);
+    }
 }

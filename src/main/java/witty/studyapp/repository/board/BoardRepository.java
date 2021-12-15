@@ -24,4 +24,9 @@ public interface BoardRepository extends JpaRepository<Notice, Long> {
     @Modifying(clearAutomatically = true)
     @Query("UPDATE Notice n Set n.date = :date WHERE n.id = :id")
     void updateDate(@Param("date") String date, @Param("id") Long id);
+
+    @Transactional
+    @Modifying(clearAutomatically = true)
+    @Query("UPDATE Notice n Set n.views = n.views+1 WHERE n.id = :id")
+    void incrementView(@Param("id") Long id);
 }
