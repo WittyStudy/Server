@@ -6,7 +6,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import witty.studyapp.annotation.Login;
-import witty.studyapp.constant.board.NoticeConstant;
 import witty.studyapp.dto.board.NoticeDTO;
 import witty.studyapp.dto.board.NoticeDetailDTO;
 import witty.studyapp.dto.board.NoticeResponseDTO;
@@ -14,7 +13,6 @@ import witty.studyapp.entity.Member;
 import witty.studyapp.entity.Notice;
 import witty.studyapp.execption.NoAuthorizationException;
 import witty.studyapp.execption.NoSuchBoardException;
-import witty.studyapp.execption.NotLoginMemberException;
 import witty.studyapp.service.board.BoardService;
 
 import java.util.ArrayList;
@@ -42,7 +40,7 @@ public class BoardController {
     @GetMapping("/{noticeId}")
     public NoticeDetailDTO getBoardDetail(@PathVariable Long noticeId){
         return getNoticeDetailDTO(
-                boardService.getById(noticeId)
+                boardService.viewNoticeDetailAndGet(noticeId)
                         .orElseThrow(()-> new NoSuchBoardException("해당 게시글이 존재하지 않습니다."))
         );
     }

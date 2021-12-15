@@ -9,6 +9,7 @@ public interface BoardService {
     Long createNotice(Notice notice);
     List<Notice> getNotices();
     Optional<Notice> getById(Long id);
+    Optional<Notice> viewNoticeDetailAndGet(Long id);
     Long updateNotice(Long id, Notice notice);
     Long deleteNotice(Long noticeId);
     List<Notice> getNoticesByTitle(String title);
