@@ -39,7 +39,6 @@ public class GlobalRestControllerAdvice {
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     @ExceptionHandler(NotLoginMemberException.class)
     public ErrorResult exceptionHandler(NotLoginMemberException e){
-        log.info("return ErrorResult");
         return new ErrorResult(e);
     }
 
@@ -58,6 +57,12 @@ public class GlobalRestControllerAdvice {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(RequiredAdditionalInformationException.class)
     public ErrorResult exceptionHandler(RequiredAdditionalInformationException e){
+        return new ErrorResult(e);
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ErrorResult exceptionHandler(IllegalArgumentException e){
         return new ErrorResult(e);
     }
 
