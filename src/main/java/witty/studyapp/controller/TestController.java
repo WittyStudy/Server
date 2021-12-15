@@ -26,7 +26,7 @@ public class TestController {
     public String testCreate(@PathVariable int number) {
         try {
             dummyCreator.create(number);
-            return "CREATE [" + number + "]";
+            return "CREATE SUCCESSFULLY " + number + " TEST DATA";
         }catch(Exception e){
             return "FAIL. already exists or Server Error. [use : /clear]";
         }

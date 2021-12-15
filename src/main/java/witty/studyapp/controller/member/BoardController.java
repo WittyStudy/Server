@@ -2,8 +2,11 @@ package witty.studyapp.controller.member;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import witty.studyapp.annotation.Login;
+import witty.studyapp.constant.board.NoticeConstant;
 import witty.studyapp.dto.board.NoticeDTO;
 import witty.studyapp.dto.board.NoticeDetailDTO;
 import witty.studyapp.dto.board.NoticeResponseDTO;
@@ -17,6 +20,8 @@ import witty.studyapp.service.board.BoardService;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+import static witty.studyapp.constant.board.NoticeConstant.*;
 
 @RestController
 @RequestMapping("/boards")
@@ -61,9 +66,11 @@ public class BoardController {
     }
 
     @PostMapping
-    public Long createBoard(@Login Member loginMember, @RequestBody NoticeDTO noticeDTO){
-        if(loginMember == null){
-            throw new NotLoginMemberException("세션이 없습니다. 로그인을 해야 합니다.");
+    public Long createBoard(@Login Member loginMember, @RequestBody @Validated NoticeDTO noticeDTO, BindingResult bindingResult){
+        if(bindingResult.hasErrors()){
+            throw new IllegalArgumentException("게시글의 형태가 올바르지 않습니다. Title 길이 제한=["
+                    + MIN_TITLE_LENGTH +"~"+MAX_TITLE_LENGTH+"]," +" Content 길이 제한=["+MIN_CONTENT_LENGTH+"~"+MAX_CONTENT_LENGTH+"], "
+                    + "입력된 Title, Content 길이=[" +noticeDTO.getTitle().length() +","+noticeDTO.getContent().length()+"]");
         }
 
         log.debug("Method createBoard called");
@@ -77,7 +84,7 @@ public class BoardController {
     }
 
     @PatchMapping("/{noticeId}")
-    public Long updateBoard(@Login Member loginMember, @PathVariable long noticeId, @RequestBody NoticeDTO noticeDTO){
+    public Long updateBoard(@Login Member loginMember, @PathVariable long noticeId, @RequestBody @Validated NoticeDTO noticeDTO){
         log.debug("Method updateBoard called");
         Notice notice = new Notice();
         notice.setTitle(noticeDTO.getTitle());
