@@ -99,4 +99,32 @@ class MemberRelationServiceImplTest {
         Member member = saveMember(1);
         assertThrows(MemberRelationException.class, () -> memberRelationService.addRelation(member.getId(),member.getId()));
     }
+
+    @Test
+    @DisplayName("사용차 친구 목록 불러오기(getFriendsList) 예외(member 존재 X)")
+    void getFriendsListExceptionTest(){
+        assertThrows(NotLoginMemberException.class, () -> memberRelationService.getFriendsList(3000L));
+    }
+
+    @Test
+    @DisplayName("사용차 친구 목록에서 삭제(deleteRelation) 예외(member 존재 X)")
+    void deleteRelationExceptionTest(){
+        Member member = saveMember(1);
+        assertThrows(NotLoginMemberException.class, () -> memberRelationService.deleteRelation(3000L,member.getId()));
+    }
+
+    @Test
+    @DisplayName("사용차 친구 목록에서 삭제(deleteRelation) 예외(target 존재 X)")
+    void deleteRelationExceptionTest2(){
+        Member member = saveMember(1);
+        assertThrows(NotFoundUserException.class, () -> memberRelationService.deleteRelation(member.getId(), 3000L));
+    }
+
+    @Test
+    @DisplayName("사용차 친구 목록에서 삭제(deleteRelation) 예외(relation 존재 X)")
+    void deleteRelationExceptionTest3(){
+        Member member1 = saveMember(1);
+        Member member2 = saveMember(2);
+        assertThrows(MemberRelationException.class, () -> memberRelationService.deleteRelation(member1.getId(), member2.getId()));
+    }
 }

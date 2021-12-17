@@ -10,4 +10,5 @@ import org.springframework.web.bind.annotation.RestController;
 @AllArgsConstructor
 @RequestMapping("/members/relation")
 public class MemberRelationController {
+    // TODO : Controller 작성 및 API spec README.md 에 작성 필요.
 }

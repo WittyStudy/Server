@@ -34,6 +34,6 @@ public class RegisterController {
         member.setName(memberRegisterDTO.getName());
         member.setPassword(memberRegisterDTO.getPassword());
         member.setEmail(memberRegisterDTO.getEmail());
-        return memberService.register(member);
+        return memberService.register(member);// TODO : 비밀번호 salt + hash 필요
     }
 }
