@@ -11,8 +11,8 @@ import witty.studyapp.dto.board.NoticeDetailDTO;
 import witty.studyapp.dto.board.NoticeResponseDTO;
 import witty.studyapp.entity.Member;
 import witty.studyapp.entity.Notice;
-import witty.studyapp.execption.NoAuthorizationException;
-import witty.studyapp.execption.NoSuchBoardException;
+import witty.studyapp.execption.custom.NoAuthorizationException;
+import witty.studyapp.execption.custom.NoSuchBoardException;
 import witty.studyapp.service.board.BoardService;
 
 import java.util.ArrayList;
@@ -32,28 +32,28 @@ public class BoardController {
     private final BoardService boardService;
 
     @GetMapping
-    public List<NoticeResponseDTO> getBoards(){
+    public List<NoticeResponseDTO> getBoards() {
         log.debug("Method getBoards called");
         return getNoticeResponseDTOs(boardService.getNotices());
     }
 
     @GetMapping("/{noticeId}")
-    public NoticeDetailDTO getBoardDetail(@PathVariable Long noticeId){
+    public NoticeDetailDTO getBoardDetail(@PathVariable Long noticeId) {
         return getNoticeDetailDTO(
                 boardService.viewNoticeDetailAndGet(noticeId)
-                        .orElseThrow(()-> new NoSuchBoardException("해당 게시글이 존재하지 않습니다."))
+                        .orElseThrow(() -> new NoSuchBoardException("해당 게시글이 존재하지 않습니다."))
         );
     }
 
     @GetMapping("/title/{query}")
-    public List<NoticeResponseDTO> getBoardsByTitleName(@PathVariable String query){
+    public List<NoticeResponseDTO> getBoardsByTitleName(@PathVariable String query) {
         return getNoticeResponseDTOs(boardService.getNoticesByTitle(query));
     }
 
     private List<NoticeResponseDTO> getNoticeResponseDTOs(List<Notice> notices) {
         List<NoticeResponseDTO> result = new ArrayList<>();
         for (Notice notice : notices) {
-            NoticeResponseDTO noticeResponseDTO = new NoticeResponseDTO(notice.getId(),notice.getTitle(),notice.getWriter().getName(), notice.getViews(), notice.getDate());
+            NoticeResponseDTO noticeResponseDTO = new NoticeResponseDTO(notice.getId(), notice.getTitle(), notice.getWriter().getName(), notice.getViews(), notice.getDate());
             result.add(noticeResponseDTO);
         }
         return result;
@@ -64,11 +64,11 @@ public class BoardController {
     }
 
     @PostMapping
-    public Long createBoard(@Login Member loginMember, @RequestBody @Validated NoticeCreateDTO noticeDTO, BindingResult bindingResult){
-        if(bindingResult.hasErrors()){
+    public Long createBoard(@Login Member loginMember, @RequestBody @Validated NoticeCreateDTO noticeDTO, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
             throw new IllegalArgumentException("게시글의 형태가 올바르지 않습니다. Title 길이 제한=["
-                    + MIN_TITLE_LENGTH +"~"+MAX_TITLE_LENGTH+"]," +" Content 길이 제한=["+MIN_CONTENT_LENGTH+"~"+MAX_CONTENT_LENGTH+"], "
-                    + "입력된 Title, Content 길이=[" +noticeDTO.getTitle().length() +","+noticeDTO.getContent().length()+"]");
+                    + MIN_TITLE_LENGTH + "~" + MAX_TITLE_LENGTH + "]," + " Content 길이 제한=[" + MIN_CONTENT_LENGTH + "~" + MAX_CONTENT_LENGTH + "], "
+                    + "입력된 Title, Content 길이=[" + noticeDTO.getTitle().length() + "," + noticeDTO.getContent().length() + "]");
         }
 
         log.debug("Method createBoard called");
@@ -82,25 +82,23 @@ public class BoardController {
     }
 
     @PatchMapping("/{noticeId}")
-    public Long updateBoard(@Login Member loginMember, @PathVariable long noticeId, @RequestBody @Validated NoticeCreateDTO noticeDTO){
+    public Long updateBoard(@Login Member loginMember, @PathVariable long noticeId, @RequestBody @Validated NoticeCreateDTO noticeDTO) {
         log.debug("Method updateBoard called");
         Notice notice = new Notice();
         notice.setTitle(noticeDTO.getTitle());
         notice.setContent(noticeDTO.getContent());
         boardService.updateNotice(noticeId, notice);
         return boardService.getById(noticeId).map((n) -> {
-            if(n.getWriter() == loginMember){
+            if (n.getWriter() == loginMember) {
                 return loginMember.getId();
-            }else{
+            } else {
                 throw new NoAuthorizationException("작성자만 수정이 가능합니다.");
             }
-        }).orElseThrow(()->{
-            throw new NoSuchBoardException("존재하지 않는 게시물입니다.");
-        });
+        }).orElseThrow(() -> new NoSuchBoardException("존재하지 않는 게시물입니다."));
     }
 
     @DeleteMapping("/{noticeId}")
-    public Long deleteBoard(@PathVariable long noticeId){
+    public Long deleteBoard(@PathVariable long noticeId) {
         log.debug("Method deleteBoard called");
         boardService.deleteNotice(noticeId);
         return noticeId;

@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import witty.studyapp.dto.member.MemberLoginDTO;
 import witty.studyapp.entity.Member;
-import witty.studyapp.execption.LoginArgumentException;
+import witty.studyapp.execption.custom.LoginArgumentException;
 import witty.studyapp.service.member.MemberService;
 
 import javax.servlet.http.HttpServletRequest;

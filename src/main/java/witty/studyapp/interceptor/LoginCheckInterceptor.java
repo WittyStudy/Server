@@ -2,8 +2,7 @@ package witty.studyapp.interceptor;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.servlet.HandlerInterceptor;
-import org.springframework.web.servlet.ModelAndView;
-import witty.studyapp.execption.NotLoginMemberException;
+import witty.studyapp.execption.custom.NotLoginMemberException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;

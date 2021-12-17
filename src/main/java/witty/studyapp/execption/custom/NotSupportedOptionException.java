@@ -1,4 +1,4 @@
-package witty.studyapp.execption;
+package witty.studyapp.execption.custom;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;

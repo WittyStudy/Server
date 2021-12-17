@@ -6,9 +6,8 @@ import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 import witty.studyapp.annotation.Login;
-import witty.studyapp.dto.member.MemberLoginDTO;
 import witty.studyapp.entity.Member;
-import witty.studyapp.execption.NotLoginMemberException;
+import witty.studyapp.execption.custom.NotLoginMemberException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;

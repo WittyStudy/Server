@@ -9,8 +9,8 @@ import witty.studyapp.dto.comment.CommentResponseDTO;
 import witty.studyapp.dto.comment.CommentUpdateDTO;
 import witty.studyapp.entity.Comment;
 import witty.studyapp.entity.Member;
-import witty.studyapp.execption.NotFoundUserException;
-import witty.studyapp.execption.RequiredAdditionalInformationException;
+import witty.studyapp.execption.custom.NotFoundUserException;
+import witty.studyapp.execption.custom.RequiredAdditionalInformationException;
 import witty.studyapp.service.comment.CommentService;
 
 import java.util.ArrayList;
