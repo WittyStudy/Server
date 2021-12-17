@@ -66,4 +66,9 @@ public class GlobalRestControllerAdvice {
         return new ErrorResult(e);
     }
 
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(MemberRelationException.class)
+    public ErrorResult exceptionHandler(MemberRelationException e){
+        return new ErrorResult(e);
+    }
 }

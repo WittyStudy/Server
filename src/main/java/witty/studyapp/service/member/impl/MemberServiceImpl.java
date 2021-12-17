@@ -21,6 +21,7 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public Long register(Member member) {
+        // TODO : Exception 처리 필요 (0을 return 하지 않고)
         if(memberPolicy.verifyMember(member) && !isAlreadyExistEmail(member.getEmail())){
             try {
                 return memberRepository.save(member).getId();
@@ -35,6 +36,7 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public Optional<Member> login(Member member) {
+        // TODO : 비밀번호 salt + hash 필요
         if(verifyMemberLogin(member)){
             return memberRepository.findByEmail(member.getEmail());
         }else {
@@ -45,6 +47,7 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public Long updateMemberName(Long memberId, String name) {
+        // TODO : Exception 처리 필요 (0을 return 하지 않고)
         return memberRepository.findById(memberId).map(member -> {
             if(memberPolicy.isValidName(name)) {
                 memberRepository.updateName(member.getId(), name);
@@ -58,6 +61,7 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public Long updateMemberPassword(Long memberId, String password) {
+        // TODO : Exception 처리 필요 (0을 return 하지 않고)
         return memberRepository.findById(memberId).map(member -> {
             if(memberPolicy.isValidPassword(password)) {
                 memberRepository.updatePassword(member.getId(), password);
@@ -81,6 +85,7 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public Long deleteMember(Long memberId) {
+        // TODO : Exception 처리 필요 (0을 return 하지 않고)
         try{
             memberRepository.deleteById(memberId);
             return memberId;
