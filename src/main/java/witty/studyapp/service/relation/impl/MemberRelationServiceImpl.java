@@ -27,10 +27,12 @@ public class MemberRelationServiceImpl implements MemberRelationService {
         Member member = memberRepository.findById(id).orElseThrow(() -> new NotLoginMemberException("사용자를 식별할 수 없습니다. 다시 로그인해야 합니다."));
         Member target = memberRepository.findById(targetId).orElseThrow(() -> new NotFoundUserException("존재하지 않는 사용자입니다."));
 
-        if (memberRelationRepository.findByMember(member).stream().anyMatch(tar -> tar.getId().equals(targetId)))
+        if (memberRelationRepository.findByMember(member).stream().anyMatch(tar -> tar.getTarget().getId().equals(targetId))) {
             throw new MemberRelationException("이미 친구인 사용자입니다.");
-        if (id.equals(targetId))
+        }
+        if (id.equals(targetId)) {
             throw new MemberRelationException("자기 자신을 친구로 등록할 수 없습니다.");
+        }
 
         MemberRelation memberRelation = new MemberRelation();
         memberRelation.setMember(member);
