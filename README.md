@@ -113,7 +113,7 @@ path:	    "/members/test"
 ```
 method:	    "POST"
 path:	    "/boards"
-require:    application/json (NoticeDTO)
+require:    application/json (NoticeCreateDTO)
 ```
 
 - get boards
@@ -170,8 +170,7 @@ require:    application/json (CommentCreateDTO)
 - get comments
 ```
 method:     "GET"
-path:       "/comments/{option}/{id}"
-options:    "user" || "board" (board requires "id" path variable)
+path:       "/comments/{id}"
 response:    application/json (List<CommentResponseDTO>)
 ```
 
@@ -245,7 +244,6 @@ Long    boardId
 String  content
 ```
 
-
 - CommentUpdateDTO
 ```
 Long    commentId
@@ -255,8 +253,7 @@ String  content
 
 - CommentResponseDTO
 ```
+Long    id
 String  content
 String  writerName
-String  boardTitle
 ```
-

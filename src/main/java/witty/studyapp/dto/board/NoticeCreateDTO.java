@@ -8,7 +8,7 @@ import javax.validation.constraints.Size;
 import static witty.studyapp.constant.board.NoticeConstant.*;
 
 @Data
-public class NoticeDTO {
+public class NoticeCreateDTO {
 
     @NotBlank
     @Size(min = MIN_TITLE_LENGTH, max = MAX_TITLE_LENGTH)

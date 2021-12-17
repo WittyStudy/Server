@@ -6,7 +6,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import witty.studyapp.annotation.Login;
-import witty.studyapp.dto.board.NoticeDTO;
+import witty.studyapp.dto.board.NoticeCreateDTO;
 import witty.studyapp.dto.board.NoticeDetailDTO;
 import witty.studyapp.dto.board.NoticeResponseDTO;
 import witty.studyapp.entity.Member;
@@ -64,7 +64,7 @@ public class BoardController {
     }
 
     @PostMapping
-    public Long createBoard(@Login Member loginMember, @RequestBody @Validated NoticeDTO noticeDTO, BindingResult bindingResult){
+    public Long createBoard(@Login Member loginMember, @RequestBody @Validated NoticeCreateDTO noticeDTO, BindingResult bindingResult){
         if(bindingResult.hasErrors()){
             throw new IllegalArgumentException("게시글의 형태가 올바르지 않습니다. Title 길이 제한=["
                     + MIN_TITLE_LENGTH +"~"+MAX_TITLE_LENGTH+"]," +" Content 길이 제한=["+MIN_CONTENT_LENGTH+"~"+MAX_CONTENT_LENGTH+"], "
@@ -82,7 +82,7 @@ public class BoardController {
     }
 
     @PatchMapping("/{noticeId}")
-    public Long updateBoard(@Login Member loginMember, @PathVariable long noticeId, @RequestBody @Validated NoticeDTO noticeDTO){
+    public Long updateBoard(@Login Member loginMember, @PathVariable long noticeId, @RequestBody @Validated NoticeCreateDTO noticeDTO){
         log.debug("Method updateBoard called");
         Notice notice = new Notice();
         notice.setTitle(noticeDTO.getTitle());
