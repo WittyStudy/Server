@@ -49,7 +49,7 @@ public class CommentController {
     private List<CommentResponseDTO> getCommentResponseDTOs(List<Comment> comments) {
         List<CommentResponseDTO> result = new ArrayList<>();
         for (Comment comment : comments) {
-            CommentResponseDTO commentResponseDTO = new CommentResponseDTO(comment.getContent(), comment.getWriter().getName(), comment.getNotice().getTitle());
+            CommentResponseDTO commentResponseDTO = new CommentResponseDTO(comment.getId(), comment.getContent(), comment.getWriter().getName(), comment.getNotice().getTitle());
             result.add(commentResponseDTO);
         }
         return result;

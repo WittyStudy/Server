@@ -255,6 +255,7 @@ String  content
 
 - CommentResponseDTO
 ```
+Long    id
 String  content
 String  writerName
 String  boardTitle
