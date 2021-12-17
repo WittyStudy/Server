@@ -28,7 +28,7 @@ public class LoginMemberArgumentResolver implements HandlerMethodArgumentResolve
         HttpServletRequest request = (HttpServletRequest) webRequest.getNativeRequest();
         HttpSession session = request.getSession(false);
         if (session == null) {
-            throw new NotLoginMemberException("먼저 로그인을 해야 합니다.");
+            throw new NotLoginMemberException();
         }
         return session.getAttribute(LOGIN_MEMBER);
     }

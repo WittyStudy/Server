@@ -7,7 +7,4 @@ import java.util.NoSuchElementException;
 
 @ResponseStatus(HttpStatus.NOT_FOUND)
 public class NoSuchCommentException extends NoSuchElementException {
-    public NoSuchCommentException(String s) {
-        super(s);
-    }
 }

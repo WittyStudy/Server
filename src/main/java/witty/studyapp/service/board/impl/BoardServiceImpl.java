@@ -49,7 +49,7 @@ public class BoardServiceImpl implements BoardService {
 
     @Override
     public Long updateNotice(Long id, Notice notice) {
-        boardRepository.findById(id).orElseThrow(() -> new NoSuchBoardException("해당 게시글이 존재하지 않습니다."));
+        boardRepository.findById(id).orElseThrow(NoSuchBoardException::new);
         boardRepository.updateTitle(notice.getTitle(), id);
         boardRepository.updateContent(notice.getContent(), id);
         boardRepository.updateDate(new Date(System.currentTimeMillis()).toString(), id);

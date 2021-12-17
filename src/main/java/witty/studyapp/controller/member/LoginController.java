@@ -33,7 +33,7 @@ public class LoginController {
 
         if (bindingResult.hasErrors()) {
             log.info("binding result error. [/members/login]");
-            throw new LoginArgumentException("로그인 형태가 올바르지 않습니다.");
+            throw new LoginArgumentException();
         }
 
         Member member = new Member();
@@ -46,7 +46,7 @@ public class LoginController {
             return m;
         }).orElseThrow(()-> {
             log.info("login fail.");
-            return new LoginArgumentException("이메일과 비밀번호가 올바르지 않습니다.");
+            return new LoginArgumentException();
         });
     }
 

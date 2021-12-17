@@ -22,7 +22,6 @@ public class MemberPolicyV1 implements MemberPolicy {
         );
     }
 
-
     /**
      * PW 정책 : 영문자, 숫자, 일부 특수문자만 조합 가능.
      * 허용 특수문자 : ! @ # $ % & * ~ , .

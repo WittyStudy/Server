@@ -9,8 +9,8 @@ import witty.studyapp.dto.comment.CommentResponseDTO;
 import witty.studyapp.dto.comment.CommentUpdateDTO;
 import witty.studyapp.entity.Comment;
 import witty.studyapp.entity.Member;
+import witty.studyapp.execption.custom.NoSuchBoardException;
 import witty.studyapp.execption.custom.NotFoundUserException;
-import witty.studyapp.execption.custom.RequiredAdditionalInformationException;
 import witty.studyapp.service.comment.CommentService;
 
 import java.util.ArrayList;
@@ -32,7 +32,7 @@ public class CommentController {
     @GetMapping("/{boardId}")
     public List<CommentResponseDTO> getCommentsByBoardId(@PathVariable Long boardId) throws NotFoundUserException {
         if (boardId == null || boardId == 0L) {
-            throw new RequiredAdditionalInformationException("BOARD ID 값이 필요합니다.");
+            throw new NoSuchBoardException();
         }
         return getCommentResponseDTOs(commentService.getCommentsByBoardId(boardId));
     }

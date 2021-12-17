@@ -26,7 +26,7 @@ public class LoginCheckInterceptor implements HandlerInterceptor {
         HttpSession session = request.getSession(false);
         if (session == null || session.getAttribute(LOGIN_MEMBER) == null) {
             log.info("No session valid.");
-            throw new NotLoginMemberException("먼저 로그인을 해야 합니다.");
+            throw new NotLoginMemberException();
         }
         return true;
     }

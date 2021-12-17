@@ -19,8 +19,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import static witty.studyapp.constant.board.NoticeConstant.*;
-
 @RestController
 @RequestMapping("/boards")
 @RequiredArgsConstructor
@@ -41,7 +39,7 @@ public class BoardController {
     public NoticeDetailDTO getBoardDetail(@PathVariable Long noticeId) {
         return getNoticeDetailDTO(
                 boardService.viewNoticeDetailAndGet(noticeId)
-                        .orElseThrow(() -> new NoSuchBoardException("해당 게시글이 존재하지 않습니다."))
+                        .orElseThrow(NoSuchBoardException::new)
         );
     }
 
@@ -66,9 +64,7 @@ public class BoardController {
     @PostMapping
     public Long createBoard(@Login Member loginMember, @RequestBody @Validated NoticeCreateDTO noticeDTO, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            throw new IllegalArgumentException("게시글의 형태가 올바르지 않습니다. Title 길이 제한=["
-                    + MIN_TITLE_LENGTH + "~" + MAX_TITLE_LENGTH + "]," + " Content 길이 제한=[" + MIN_CONTENT_LENGTH + "~" + MAX_CONTENT_LENGTH + "], "
-                    + "입력된 Title, Content 길이=[" + noticeDTO.getTitle().length() + "," + noticeDTO.getContent().length() + "]");
+            throw new IllegalArgumentException();
         }
 
         log.debug("Method createBoard called");
@@ -92,9 +88,9 @@ public class BoardController {
             if (n.getWriter() == loginMember) {
                 return loginMember.getId();
             } else {
-                throw new NoAuthorizationException("작성자만 수정이 가능합니다.");
+                throw new NoAuthorizationException();
             }
-        }).orElseThrow(() -> new NoSuchBoardException("존재하지 않는 게시물입니다."));
+        }).orElseThrow(NoSuchBoardException::new);
     }
 
     @DeleteMapping("/{noticeId}")

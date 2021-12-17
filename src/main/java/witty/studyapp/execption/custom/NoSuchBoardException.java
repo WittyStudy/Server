@@ -7,7 +7,4 @@ import java.util.NoSuchElementException;
 
 @ResponseStatus(HttpStatus.NOT_FOUND)
 public class NoSuchBoardException extends NoSuchElementException {
-    public NoSuchBoardException(String s) {
-        super(s);
-    }
 }

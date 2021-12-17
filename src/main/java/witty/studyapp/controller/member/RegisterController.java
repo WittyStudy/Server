@@ -27,7 +27,7 @@ public class RegisterController {
 
         if(bindingResult.hasErrors()){
             log.info("binding result error. [/members/register]");
-            throw new RegisterArgumentException("회원가입 형태가 올바르지 않습니다.");
+            throw new RegisterArgumentException();
         }
 
         Member member = new Member();
