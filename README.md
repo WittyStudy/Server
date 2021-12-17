@@ -124,6 +124,15 @@ path:	    "/boards"
 response:   application/json (List<BoardResponseDTO>)
 ```
 
+- get board detail (set view = view + 1)
+
+```
+method:	    "GET"
+path:	    "/boards/{noticeId}"
+response:   application/json (NoticeDetailDTO)
+```
+
+
 - get boards by title
 
 ```
