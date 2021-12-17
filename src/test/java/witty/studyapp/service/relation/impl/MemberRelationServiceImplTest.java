@@ -8,11 +8,13 @@ import witty.studyapp.entity.Member;
 import witty.studyapp.service.member.MemberService;
 import witty.studyapp.service.relation.MemberRelationService;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
+@Transactional
 class MemberRelationServiceImplTest {
 
     @Autowired
@@ -35,8 +37,8 @@ class MemberRelationServiceImplTest {
         assertThat(friendsList.size()).isEqualTo(2);
 
         // Get Added (Relation)Members
-        assertThat(friendsList).containsExactly(member2);
-        assertThat(friendsList).containsExactly(member3);
+        assertThat(friendsList).contains(member2);
+        assertThat(friendsList).contains(member3);
     }
 
     @Test
@@ -52,7 +54,7 @@ class MemberRelationServiceImplTest {
         List<Member> friendsList = memberRelationService.getFriendsList(member1.getId());
 
         assertThat(friendsList.size()).isEqualTo(1);
-        assertThat(friendsList).containsExactly(member2);
+        assertThat(friendsList).contains(member2);
     }
 
     Member saveMember(int number){

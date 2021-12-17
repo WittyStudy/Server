@@ -22,6 +22,6 @@ public class MemberRelation {
     private Member member;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "MEMBER_ID")
+    @JoinColumn
     private Member target;
 }
