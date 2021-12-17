@@ -71,4 +71,10 @@ public class GlobalRestControllerAdvice {
     public ErrorResult exceptionHandler(MemberRelationException e){
         return new ErrorResult(e);
     }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(NoSuchCommentException.class)
+    public ErrorResult exceptionHandler(NoSuchCommentException e){
+        return new ErrorResult(e);
+    }
 }
