@@ -43,12 +43,6 @@ public class GlobalRestControllerAdvice {
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(NotSupportedOptionException.class)
-    public ErrorResult exceptionHandler(NotSupportedOptionException e){
-        return new ErrorResult(e);
-    }
-
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(RegisterArgumentException.class)
     public ErrorResult exceptionHandler(RegisterArgumentException e){
         return new ErrorResult(e);
