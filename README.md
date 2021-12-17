@@ -113,7 +113,7 @@ path:	    "/members/test"
 ```
 method:	    "POST"
 path:	    "/boards"
-require:    application/json (NoticeDTO)
+require:    application/json (NoticeCreateDTO)
 ```
 
 - get boards
