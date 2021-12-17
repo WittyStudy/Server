@@ -9,5 +9,4 @@ public class CommentResponseDTO {
     private Long id;
     private String content;
     private String writerName;
-    private String boardTitle;
 }
