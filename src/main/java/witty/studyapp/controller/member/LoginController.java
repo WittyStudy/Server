@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import witty.studyapp.dto.member.MemberLoginDTO;
 import witty.studyapp.entity.Member;
-import witty.studyapp.execption.LoginArgumentException;
+import witty.studyapp.execption.custom.LoginArgumentException;
 import witty.studyapp.service.member.MemberService;
 
 import javax.servlet.http.HttpServletRequest;
@@ -33,7 +33,7 @@ public class LoginController {
 
         if (bindingResult.hasErrors()) {
             log.info("binding result error. [/members/login]");
-            throw new LoginArgumentException("로그인 형태가 올바르지 않습니다.");
+            throw new LoginArgumentException();
         }
 
         Member member = new Member();
@@ -46,7 +46,7 @@ public class LoginController {
             return m;
         }).orElseThrow(()-> {
             log.info("login fail.");
-            return new LoginArgumentException("이메일과 비밀번호가 올바르지 않습니다.");
+            return new LoginArgumentException();
         });
     }
 

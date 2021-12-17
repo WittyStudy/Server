@@ -3,6 +3,7 @@ package witty.studyapp.service.board.impl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import witty.studyapp.entity.Notice;
+import witty.studyapp.execption.custom.NoSuchBoardException;
 import witty.studyapp.repository.board.BoardRepository;
 import witty.studyapp.service.board.BoardService;
 
@@ -48,14 +49,11 @@ public class BoardServiceImpl implements BoardService {
 
     @Override
     public Long updateNotice(Long id, Notice notice) {
-        try {
-            boardRepository.updateTitle(notice.getTitle(), id);
-            boardRepository.updateContent(notice.getContent(), id);
-            boardRepository.updateDate(new Date(System.currentTimeMillis()).toString(), id);
-            return id;
-        } catch (Exception e) {    // TODO : Exception 정의 필요.
-            return 0L;
-        }
+        boardRepository.findById(id).orElseThrow(NoSuchBoardException::new);
+        boardRepository.updateTitle(notice.getTitle(), id);
+        boardRepository.updateContent(notice.getContent(), id);
+        boardRepository.updateDate(new Date(System.currentTimeMillis()).toString(), id);
+        return id;
     }
 
     @Override

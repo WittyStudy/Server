@@ -4,15 +4,17 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import witty.studyapp.entity.Member;
 import witty.studyapp.entity.MemberRelation;
-import witty.studyapp.execption.MemberRelationException;
-import witty.studyapp.execption.NotFoundUserException;
-import witty.studyapp.execption.NotLoginMemberException;
+import witty.studyapp.execption.custom.MemberRelationException;
+import witty.studyapp.execption.custom.NotFoundUserException;
+import witty.studyapp.execption.custom.NotLoginMemberException;
 import witty.studyapp.repository.member.MemberRepository;
 import witty.studyapp.repository.relation.MemberRelationRepository;
 import witty.studyapp.service.relation.MemberRelationService;
 
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static witty.studyapp.constant.exception.ExceptionConstant.*;
 
 @Service
 @AllArgsConstructor
@@ -24,14 +26,14 @@ public class MemberRelationServiceImpl implements MemberRelationService {
     @Override
     public Long addRelation(Long id, Long targetId) {
 
-        Member member = memberRepository.findById(id).orElseThrow(() -> new NotLoginMemberException("사용자를 식별할 수 없습니다. 다시 로그인해야 합니다."));
-        Member target = memberRepository.findById(targetId).orElseThrow(() -> new NotFoundUserException("존재하지 않는 사용자입니다."));
+        Member member = memberRepository.findById(id).orElseThrow(NotLoginMemberException::new);
+        Member target = memberRepository.findById(targetId).orElseThrow(NotFoundUserException::new);
 
         if (memberRelationRepository.findByMember(member).stream().anyMatch(tar -> tar.getTarget().getId().equals(targetId))) {
-            throw new MemberRelationException("이미 친구인 사용자입니다.");
+            throw new MemberRelationException(MEMBER_RELATION_ALREADY);
         }
         if (id.equals(targetId)) {
-            throw new MemberRelationException("자기 자신을 친구로 등록할 수 없습니다.");
+            throw new MemberRelationException(MEMBER_RELATION_MYSELF);
         }
 
         MemberRelation memberRelation = new MemberRelation();
@@ -46,7 +48,7 @@ public class MemberRelationServiceImpl implements MemberRelationService {
         return memberRelationRepository.findByMember(
                         memberRepository
                                 .findById(id)
-                                .orElseThrow(() -> new NotLoginMemberException("사용자를 식별할 수 없습니다. 다시 로그인해야 합니다."))
+                                .orElseThrow(NotLoginMemberException::new)
                 ).stream()
                 .map(MemberRelation::getTarget)
                 .collect(Collectors.toList());
@@ -54,13 +56,13 @@ public class MemberRelationServiceImpl implements MemberRelationService {
 
     @Override
     public Long deleteRelation(Long id, Long targetId) {
-        memberRepository.findById(id).orElseThrow(() -> new NotLoginMemberException("사용자를 식별할 수 없습니다. 다시 로그인해야 합니다."));
-        memberRepository.findById(targetId).orElseThrow(() -> new NotFoundUserException("존재하지 않는 사용자입니다."));
+        memberRepository.findById(id).orElseThrow(NotLoginMemberException::new);
+        memberRepository.findById(targetId).orElseThrow(NotFoundUserException::new);
 
         memberRelationRepository.deleteById(
                 memberRelationRepository.findByMemberAndTarget(id, targetId)
                         .map(MemberRelation::getId)
-                        .orElseThrow(() -> new MemberRelationException("친구 관계가 아닙니다.")));
+                        .orElseThrow(() -> new MemberRelationException(MEMBER_RELATION_NO_RELATION)));
         return targetId;
     }
 }

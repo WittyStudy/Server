@@ -2,8 +2,7 @@ package witty.studyapp.interceptor;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.servlet.HandlerInterceptor;
-import org.springframework.web.servlet.ModelAndView;
-import witty.studyapp.execption.NotLoginMemberException;
+import witty.studyapp.execption.custom.NotLoginMemberException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -27,7 +26,7 @@ public class LoginCheckInterceptor implements HandlerInterceptor {
         HttpSession session = request.getSession(false);
         if (session == null || session.getAttribute(LOGIN_MEMBER) == null) {
             log.info("No session valid.");
-            throw new NotLoginMemberException("먼저 로그인을 해야 합니다.");
+            throw new NotLoginMemberException();
         }
         return true;
     }

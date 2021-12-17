@@ -6,9 +6,8 @@ import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 import witty.studyapp.annotation.Login;
-import witty.studyapp.dto.member.MemberLoginDTO;
 import witty.studyapp.entity.Member;
-import witty.studyapp.execption.NotLoginMemberException;
+import witty.studyapp.execption.custom.NotLoginMemberException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -29,7 +28,7 @@ public class LoginMemberArgumentResolver implements HandlerMethodArgumentResolve
         HttpServletRequest request = (HttpServletRequest) webRequest.getNativeRequest();
         HttpSession session = request.getSession(false);
         if (session == null) {
-            throw new NotLoginMemberException("먼저 로그인을 해야 합니다.");
+            throw new NotLoginMemberException();
         }
         return session.getAttribute(LOGIN_MEMBER);
     }

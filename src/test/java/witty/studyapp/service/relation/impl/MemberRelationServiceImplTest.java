@@ -5,9 +5,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import witty.studyapp.entity.Member;
-import witty.studyapp.execption.MemberRelationException;
-import witty.studyapp.execption.NotFoundUserException;
-import witty.studyapp.execption.NotLoginMemberException;
+import witty.studyapp.execption.custom.MemberRelationException;
+import witty.studyapp.execption.custom.NotFoundUserException;
+import witty.studyapp.execption.custom.NotLoginMemberException;
 import witty.studyapp.service.member.MemberService;
 import witty.studyapp.service.relation.MemberRelationService;
 
