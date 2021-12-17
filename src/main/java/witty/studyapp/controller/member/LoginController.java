@@ -6,6 +6,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import witty.studyapp.dto.member.MemberLoginDTO;
 import witty.studyapp.entity.Member;
@@ -20,6 +21,7 @@ import static witty.studyapp.constant.session.SessionConstant.LOGIN_MEMBER;
 @Slf4j
 @RestController
 @AllArgsConstructor
+@RequestMapping("/members")
 public class LoginController {
 
     private final MemberService memberService;
