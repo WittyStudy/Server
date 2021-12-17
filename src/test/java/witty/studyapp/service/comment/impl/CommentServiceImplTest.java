@@ -131,7 +131,7 @@ class CommentServiceImplTest {
 
         List<Comment> commentsByBoardId = commentService.getCommentsByBoardId(notice.getId());
         for (Comment comment : commentsByBoardId) {
-            commentService.deleteComment(comment.getId());
+            commentService.deleteComment(member, comment.getId());
         }
         assertThat(commentService.getCommentsByBoardId(notice.getId()).size()).isEqualTo(prev);
     }
@@ -153,8 +153,10 @@ class CommentServiceImplTest {
 
         Long commentId = commentService.createComment(comment, member.getId(), notice.getId());
         assertThat(commentId).isEqualTo(comment.getId());
+        comment2.setId(comment.getId());
 
-        commentService.updateComment(comment2, comment.getId());
-        assertThat(comment.getContent()).isEqualTo(new_content);
+        commentService.updateComment(member, comment2);
+        Comment updatedComment = commentService.getAllComments().stream().filter(c -> c.getId().equals(commentId)).findAny().get();
+        assertThat(updatedComment.getContent()).isEqualTo(new_content);
     }
 }

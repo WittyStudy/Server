@@ -50,7 +50,7 @@ public class DummyCreator {
 
         result = "[" + members.size() + "][" + notices.size() + "][" + comments.size() + "]";
         for (Comment comment : comments) {
-            commentService.deleteComment(comment.getId());
+            commentService.deleteComment(memberService.getMemberById(comment.getWriter().getId()), comment.getId());
         }
         for (Notice notice : notices) {
             boardService.deleteNotice(notice.getId());

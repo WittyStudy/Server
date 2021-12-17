@@ -63,14 +63,15 @@ public class CommentController {
     }
 
     @PatchMapping
-    public Long updateCommentContext(@RequestBody CommentUpdateDTO commentUpdateDTO){
+    public Long updateCommentContext(@Login Member loginMember, @RequestBody CommentUpdateDTO commentUpdateDTO){
         Comment comment = new Comment();
         comment.setContent(commentUpdateDTO.getContent());
-        return commentService.updateComment(comment, commentUpdateDTO.getCommentId());
+        comment.setId(commentUpdateDTO.getCommentId());
+        return commentService.updateComment(loginMember, comment);
     }
 
     @DeleteMapping("/{commentId}")
-    public Long deleteCommentById(@PathVariable Long commentId){
-        return commentService.deleteComment(commentId);
+    public Long deleteCommentById(@Login Member loginMember, @PathVariable Long commentId){
+        return commentService.deleteComment(loginMember, commentId);
     }
 }
