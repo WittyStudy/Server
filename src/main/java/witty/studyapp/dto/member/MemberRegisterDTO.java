@@ -1,7 +1,9 @@
 package witty.studyapp.dto.member;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -11,6 +13,8 @@ import static witty.studyapp.constant.member.MemberConstant.*;
 
 @Data
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class MemberRegisterDTO {
 
     @NotBlank
