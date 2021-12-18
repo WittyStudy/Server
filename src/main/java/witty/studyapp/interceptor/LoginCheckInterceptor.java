@@ -25,7 +25,10 @@ public class LoginCheckInterceptor implements HandlerInterceptor {
 
         HttpSession session = request.getSession(false);
         if (session == null || session.getAttribute(LOGIN_MEMBER) == null) {
-            log.info("No session valid.");
+            log.warn("No session valid.");
+            log.warn("requestLocale={}",request.getLocale());
+            log.warn("requestRemoteHost={}",request.getRemoteHost());
+
             throw new NotLoginMemberException();
         }
         return true;
