@@ -1,5 +1,6 @@
 package witty.studyapp.dto.board;
 
+import lombok.Builder;
 import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
@@ -8,6 +9,7 @@ import javax.validation.constraints.Size;
 import static witty.studyapp.constant.board.NoticeConstant.*;
 
 @Data
+@Builder
 public class NoticeCreateDTO {
 
     @NotBlank

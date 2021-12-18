@@ -30,10 +30,10 @@ public class RegisterController {
             throw new RegisterArgumentException();
         }
 
-        Member member = new Member();
-        member.setName(memberRegisterDTO.getName());
-        member.setPassword(memberRegisterDTO.getPassword());
-        member.setEmail(memberRegisterDTO.getEmail());
-        return memberService.register(member);// TODO : 비밀번호 salt + hash 필요
+        return memberService.register(Member.builder()
+                .name(memberRegisterDTO.getName())
+                .password(memberRegisterDTO.getPassword())
+                .email(memberRegisterDTO.getEmail())
+                .build());
     }
 }

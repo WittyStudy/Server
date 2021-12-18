@@ -1,11 +1,13 @@
 package witty.studyapp.dto.comment;
 
+import lombok.Builder;
 import lombok.Data;
 import witty.studyapp.constant.comment.CommentConstant;
 
 import javax.validation.constraints.Size;
 
 @Data
+@Builder
 public class CommentCreateDTO {
     private Long boardId;
 
