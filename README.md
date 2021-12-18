@@ -210,7 +210,7 @@ String  password
 
 ### 5.2. Board DTO
 
-- NoticeDTO
+- NoticeCreateDTO
 ```
 String  title
 String  content

@@ -28,7 +28,7 @@ public class LoginController {
     private final MemberService memberService;
 
     @PostMapping("/login")
-    public Object login(@RequestBody @Validated MemberLoginDTO memberLoginDTO, BindingResult bindingResult,
+    public String login(@RequestBody @Validated MemberLoginDTO memberLoginDTO, BindingResult bindingResult,
                         HttpServletRequest request) {
         log.info("/login called.");
 
@@ -44,7 +44,7 @@ public class LoginController {
                 .map((member) -> {
             HttpSession session = request.getSession(true);
             session.setAttribute(LOGIN_MEMBER, member);
-            return member;
+            return "OK";
         }).orElseThrow(()-> {
             log.info("login fail.");
             return new UnknownException();
