@@ -84,4 +84,10 @@ public class GlobalRestControllerAdvice {
     public ErrorResult exceptionHandler(UnknownException e){
         return new ErrorResult(e, UNKNOWN);
     }
+
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ExceptionHandler(NotFoundPageException.class)
+    public ErrorResult exceptionHandler(NotFoundPageException e){
+        return new ErrorResult(e, NOT_FOUND_PAGE);
+    }
 }
