@@ -58,11 +58,9 @@ public class BoardServiceImpl implements BoardService {
 
     @Override
     public Long deleteNotice(Long noticeId) {
-        try {
-            boardRepository.deleteById(noticeId);
-            return noticeId;
-        } catch (Exception e) {    // Exception 정의 필요.
-            return 0L;
-        }
+        return boardRepository.findById(noticeId).map(notice -> {
+            boardRepository.deleteById(notice.getId());
+            return notice.getId();
+        }).orElseThrow(NoSuchBoardException::new);
     }
 }

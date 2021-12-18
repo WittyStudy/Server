@@ -4,6 +4,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import witty.studyapp.entity.Member;
+import witty.studyapp.execption.custom.LoginArgumentException;
+import witty.studyapp.execption.custom.NotFoundUserException;
+import witty.studyapp.execption.custom.RegisterArgumentException;
 import witty.studyapp.repository.member.MemberRepository;
 import witty.studyapp.service.member.MemberPolicy;
 import witty.studyapp.service.member.MemberService;
@@ -21,61 +24,47 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public Long register(Member member) {
-        // TODO : Exception 처리 필요 (0을 return 하지 않고)
         if(memberPolicy.verifyMember(member) && !isAlreadyExistEmail(member.getEmail())){
-            try {
-                return memberRepository.save(member).getId();
-            }catch(Exception e){    // Exception 처리 필요.
-                log.warn("error",e);
-                return 0L;
-            }
+            return memberRepository.save(member).getId();
         }else {
-            return 0L;
+            throw new RegisterArgumentException();
         }
     }
 
     @Override
     public Optional<Member> login(Member member) {
         // TODO : 비밀번호 salt + hash 필요
-        if(verifyMemberLogin(member)){
-            return memberRepository.findByEmail(member.getEmail());
-        }else {
-            log.info("returned : Optional.empty() in [MemberServiceImpl::login]");
-            return Optional.empty();
-        }
+        return Optional.of(memberRepository.findByEmail(member.getEmail())
+                .filter(this::verifyMemberLogin)
+                .orElseThrow(LoginArgumentException::new));
     }
 
     @Override
     public Long updateMemberName(Long memberId, String name) {
-        // TODO : Exception 처리 필요 (0을 return 하지 않고)
-        return memberRepository.findById(memberId).map(member -> {
-            if(memberPolicy.isValidName(name)) {
-                memberRepository.updateName(member.getId(), name);
-                return member.getId();
-            }else{
-                log.debug("memberId:'{}' is failed to update name:'{}'",memberId,name);
-                return 0L;
-            }
-        }).orElse(0L);
+        if(memberPolicy.isValidName(name)){
+            memberRepository.updateName(checkPresentId(memberId), name);
+        }else{
+            throw new IllegalArgumentException();
+        }
+        return memberId;
     }
 
     @Override
     public Long updateMemberPassword(Long memberId, String password) {
-        // TODO : Exception 처리 필요 (0을 return 하지 않고)
         return memberRepository.findById(memberId).map(member -> {
             if(memberPolicy.isValidPassword(password)) {
                 memberRepository.updatePassword(member.getId(), password);
                 return member.getId();
             }else{
                 log.debug("memberId:'{}' is failed to update password:'{}'",memberId,password);
-                return 0L;
+                throw new IllegalArgumentException();
             }
-        }).orElse(0L);
+        }).orElseThrow(NotFoundUserException::new);
     }
 
     @Override
-    public Member getMemberById(Long id) {
-        return memberRepository.getById(id);
+    public Optional<Member> getMemberById(Long id) {
+        return Optional.of(memberRepository.getById(id));
     }
 
     @Override
@@ -85,13 +74,13 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public Long deleteMember(Long memberId) {
-        // TODO : Exception 처리 필요 (0을 return 하지 않고)
-        try{
-            memberRepository.deleteById(memberId);
-            return memberId;
-        }catch(Exception e) {
-            return 0L;
-        }
+        memberRepository.deleteById(checkPresentId(memberId));
+        return memberId;
+    }
+
+    private Long checkPresentId(Long memberId) {
+        memberRepository.findById(memberId).orElseThrow(NotFoundUserException::new);
+        return memberId;
     }
 
     private boolean verifyMemberLogin(Member member){

@@ -50,7 +50,7 @@ public class DummyCreator {
 
         result = "[" + members.size() + "][" + notices.size() + "][" + comments.size() + "]";
         for (Comment comment : comments) {
-            commentService.deleteComment(memberService.getMemberById(comment.getWriter().getId()), comment.getId());
+            commentService.deleteComment(memberService.getMemberById(comment.getWriter().getId()).get(), comment.getId());
         }
         for (Notice notice : notices) {
             boardService.deleteNotice(notice.getId());
@@ -67,7 +67,7 @@ public class DummyCreator {
             for (int j = 0; j < notices.size(); j++) {
                 Comment comment = new Comment();
                 comment.setContent("this is comment. on notice[#" + notices.get(j).getId() + "] created by " + members.get(i).getName());
-                comment.setWriter(memberService.getMemberById(members.get(i).getId()));
+                comment.setWriter(memberService.getMemberById(members.get(i).getId()).get());
                 comment.setNotice(boardService.getById(notices.get(j).getId()).get());
                 result.add(comment);
             }
@@ -81,7 +81,7 @@ public class DummyCreator {
             Notice notice = new Notice();
             Date date = new Date(System.currentTimeMillis());
             notice.setDate(date.toString());
-            notice.setWriter(memberService.getMemberById(members.get(i).getId()));
+            notice.setWriter(memberService.getMemberById(members.get(i).getId()).get());
             notice.setTitle("title " + (i + 1) + " created by " + members.get(i).getName());
             notice.setViews(1L + i);
             notice.setContent("content " + (i + 1) + " created by " + members.get(i).getName());

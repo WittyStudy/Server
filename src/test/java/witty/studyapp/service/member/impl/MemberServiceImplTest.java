@@ -60,7 +60,7 @@ class MemberServiceImplTest {
         Long result = memberService.updateMemberName(member.getId(), newName);
         assertThat(result).isNotEqualTo(0L);
         assertThat(memberId).isEqualTo(member.getId());
-        assertThat(memberService.getMemberById(member.getId()).getName()).isEqualTo(newName);
+        assertThat(memberService.getMemberById(member.getId()).get().getName()).isEqualTo(newName);
     }
 
     @Test
@@ -72,7 +72,7 @@ class MemberServiceImplTest {
         assertThat(memberId).isEqualTo(member.getId());
         Long result = memberService.updateMemberPassword(member.getId(), newPassword);
         assertThat(result).isNotEqualTo(0L);
-        assertThat(memberService.getMemberById(member.getId()).getPassword()).isEqualTo(newPassword);
+        assertThat(memberService.getMemberById(member.getId()).get().getPassword()).isEqualTo(newPassword);
     }
 
     @Test
