@@ -37,32 +37,36 @@ public class CommentController {
         return getCommentResponseDTOs(commentService.getCommentsByBoardId(boardId));
     }
 
-    private List<CommentResponseDTO> getCommentResponseDTOs(List<Comment> comments) {
-        List<CommentResponseDTO> result = new ArrayList<>();
-        for (Comment comment : comments) {
-            CommentResponseDTO commentResponseDTO = new CommentResponseDTO(comment.getId(), comment.getContent(), comment.getWriter().getName());
-            result.add(commentResponseDTO);
-        }
-        return result;
-    }
-
     @PostMapping
     public Long createComment(@Login Member loginMember, @RequestBody CommentCreateDTO commentCreateDTO) {
-        Comment comment = new Comment();
-        comment.setContent(commentCreateDTO.getContent());
-        return commentService.createComment(comment, loginMember.getId(), commentCreateDTO.getBoardId());
+        return commentService.createComment(Comment.builder()
+                .content(commentCreateDTO.getContent())
+                .build(),
+                loginMember.getId(), commentCreateDTO.getBoardId());
     }
 
     @PatchMapping
     public Long updateCommentContext(@Login Member loginMember, @RequestBody CommentUpdateDTO commentUpdateDTO) {
-        Comment comment = new Comment();
-        comment.setContent(commentUpdateDTO.getContent());
-        comment.setId(commentUpdateDTO.getCommentId());
-        return commentService.updateComment(loginMember, comment);
+        return commentService.updateComment(loginMember, Comment.builder()
+                .content(commentUpdateDTO.getContent())
+                .id(commentUpdateDTO.getCommentId())
+                .build());
     }
 
     @DeleteMapping("/{commentId}")
     public Long deleteCommentById(@Login Member loginMember, @PathVariable Long commentId) {
         return commentService.deleteComment(loginMember, commentId);
+    }
+
+    private List<CommentResponseDTO> getCommentResponseDTOs(List<Comment> comments) {
+        List<CommentResponseDTO> result = new ArrayList<>();
+        for (Comment comment : comments) {
+            result.add(CommentResponseDTO.builder()
+                    .id(comment.getId())
+                    .content(comment.getContent())
+                    .writerName(comment.getWriter().getName())
+                    .build());
+        }
+        return result;
     }
 }

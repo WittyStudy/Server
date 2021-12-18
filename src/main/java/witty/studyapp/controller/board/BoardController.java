@@ -48,19 +48,6 @@ public class BoardController {
         return getNoticeResponseDTOs(boardService.getNoticesByTitle(query));
     }
 
-    private List<NoticeResponseDTO> getNoticeResponseDTOs(List<Notice> notices) {
-        List<NoticeResponseDTO> result = new ArrayList<>();
-        for (Notice notice : notices) {
-            NoticeResponseDTO noticeResponseDTO = new NoticeResponseDTO(notice.getId(), notice.getTitle(), notice.getWriter().getName(), notice.getViews(), notice.getDate());
-            result.add(noticeResponseDTO);
-        }
-        return result;
-    }
-
-    private NoticeDetailDTO getNoticeDetailDTO(Notice notice) {
-        return new NoticeDetailDTO(notice.getId(), notice.getTitle(), notice.getWriter().getName(), notice.getViews(), notice.getDate(), notice.getContent());
-    }
-
     @PostMapping
     public Long createBoard(@Login Member loginMember, @RequestBody @Validated NoticeCreateDTO noticeDTO, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
@@ -68,22 +55,23 @@ public class BoardController {
         }
 
         log.debug("Method createBoard called");
-        Notice notice = new Notice();
-        notice.setTitle(noticeDTO.getTitle());
-        notice.setWriter(loginMember);
-        notice.setContent(noticeDTO.getContent());
-        notice.setDate(new Date(System.currentTimeMillis()).toString());
-        notice.setViews(0L);
-        return boardService.createNotice(notice);
+        return boardService.createNotice(Notice.builder()
+                .title(noticeDTO.getTitle())
+                .writer(loginMember)
+                .content(noticeDTO.getContent())
+                .date(new Date(System.currentTimeMillis()).toString())
+                .views(0L)
+                .build());
     }
 
     @PatchMapping("/{noticeId}")
     public Long updateBoard(@Login Member loginMember, @PathVariable long noticeId, @RequestBody @Validated NoticeCreateDTO noticeDTO) {
         log.debug("Method updateBoard called");
-        Notice notice = new Notice();
-        notice.setTitle(noticeDTO.getTitle());
-        notice.setContent(noticeDTO.getContent());
-        boardService.updateNotice(noticeId, notice);
+        boardService.updateNotice(noticeId, Notice.builder()
+                .title(noticeDTO.getTitle())
+                .content(noticeDTO.getContent())
+                .date(new Date(System.currentTimeMillis()).toString())
+                .build());
         return boardService.getById(noticeId).map((n) -> {
             if (n.getWriter() == loginMember) {
                 return loginMember.getId();
@@ -98,5 +86,30 @@ public class BoardController {
         log.debug("Method deleteBoard called");
         boardService.deleteNotice(noticeId);
         return noticeId;
+    }
+
+    private List<NoticeResponseDTO> getNoticeResponseDTOs(List<Notice> notices) {
+        List<NoticeResponseDTO> result = new ArrayList<>();
+        for (Notice notice : notices) {
+            result.add(NoticeResponseDTO.builder()
+                    .id(notice.getId())
+                    .title(notice.getTitle())
+                    .writerName(notice.getWriter().getName())
+                    .views(notice.getViews())
+                    .date(notice.getDate())
+                    .build());
+        }
+        return result;
+    }
+
+    private NoticeDetailDTO getNoticeDetailDTO(Notice notice) {
+        return NoticeDetailDTO.builder()
+                .id(notice.getId())
+                .title(notice.getTitle())
+                .writerName(notice.getWriter().getName())
+                .views(notice.getViews())
+                .date(notice.getDate())
+                .content(notice.getContent())
+                .build();
     }
 }

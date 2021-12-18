@@ -37,14 +37,14 @@ public class LoginController {
             throw new LoginArgumentException();
         }
 
-        Member member = new Member();
-        member.setEmail(memberLoginDTO.getEmail());
-        member.setPassword(memberLoginDTO.getPassword());
-
-        return memberService.login(member).map((m) -> {
+        return memberService.login(Member.builder()
+                .email(memberLoginDTO.getEmail())
+                .password(memberLoginDTO.getPassword())
+                .build())
+                .map((member) -> {
             HttpSession session = request.getSession(true);
-            session.setAttribute(LOGIN_MEMBER, m);
-            return m;
+            session.setAttribute(LOGIN_MEMBER, member);
+            return member;
         }).orElseThrow(()-> {
             log.info("login fail.");
             return new UnknownException();
