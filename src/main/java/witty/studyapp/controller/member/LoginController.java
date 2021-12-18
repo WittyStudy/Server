@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import witty.studyapp.dto.member.MemberLoginDTO;
 import witty.studyapp.entity.Member;
 import witty.studyapp.execption.custom.LoginArgumentException;
+import witty.studyapp.execption.custom.UnknownException;
 import witty.studyapp.service.member.MemberService;
 
 import javax.servlet.http.HttpServletRequest;
@@ -46,7 +47,7 @@ public class LoginController {
             return m;
         }).orElseThrow(()-> {
             log.info("login fail.");
-            return new LoginArgumentException();
+            return new UnknownException();
         });
     }
 

@@ -31,6 +31,8 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-validation:2.6.1'
 	runtimeOnly 'mysql:mysql-connector-java:8.0.25'
 	implementation 'org.jasypt:jasypt:1.9.3'
+
+	implementation 'org.springframework.boot:spring-boot-starter-security:2.6.1'
 }
 
 test {

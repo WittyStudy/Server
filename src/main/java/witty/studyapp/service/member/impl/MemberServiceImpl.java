@@ -2,10 +2,12 @@ package witty.studyapp.service.member.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import witty.studyapp.entity.Member;
 import witty.studyapp.execption.custom.LoginArgumentException;
 import witty.studyapp.execption.custom.NotFoundUserException;
+import witty.studyapp.execption.custom.PasswordWrongException;
 import witty.studyapp.execption.custom.RegisterArgumentException;
 import witty.studyapp.repository.member.MemberRepository;
 import witty.studyapp.service.member.MemberPolicy;
@@ -21,10 +23,13 @@ public class MemberServiceImpl implements MemberService {
 
     private final MemberRepository memberRepository;
     private final MemberPolicy memberPolicy;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public Long register(Member member) {
         if(memberPolicy.verifyMember(member) && !isAlreadyExistEmail(member.getEmail())){
+            member.setPassword(passwordEncoder.encode(member.getPassword()));
+            System.out.println("member.getPassword() = " + member.getPassword());
             return memberRepository.save(member).getId();
         }else {
             throw new RegisterArgumentException();
@@ -34,9 +39,8 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public Optional<Member> login(Member member) {
         // TODO : 비밀번호 salt + hash 필요
-        return Optional.of(memberRepository.findByEmail(member.getEmail())
-                .filter(this::verifyMemberLogin)
-                .orElseThrow(LoginArgumentException::new));
+        checkPresentEmail(member.getEmail());
+        return Optional.of(verifyMemberLogin(member));
     }
 
     @Override
@@ -83,10 +87,14 @@ public class MemberServiceImpl implements MemberService {
         return memberId;
     }
 
-    private boolean verifyMemberLogin(Member member){
+    private void checkPresentEmail(String email){
+        memberRepository.findByEmail(email).orElseThrow(NotFoundUserException::new);
+    }
+
+    private Member verifyMemberLogin(Member member){
         return memberRepository.findByEmail(member.getEmail())
-                .map(m -> m.getPassword().equals(member.getPassword()))
-                .orElse(false);
+                .filter(m -> passwordEncoder.matches(member.getPassword(), m.getPassword()))
+                .orElseThrow(PasswordWrongException::new);
     }
 
     private boolean isAlreadyExistEmail(String email){

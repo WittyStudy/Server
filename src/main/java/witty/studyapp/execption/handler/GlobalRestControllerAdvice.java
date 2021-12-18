@@ -66,4 +66,22 @@ public class GlobalRestControllerAdvice {
     public ErrorResult exceptionHandler(NoSuchCommentException e) {
         return new ErrorResult(e, NO_SUCH_COMMENT);
     }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(PasswordWrongException.class)
+    public ErrorResult exceptionHandler(PasswordWrongException e) {
+        return new ErrorResult(e, WRONG_PASSWORD);
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ErrorResult exceptionHandler(IllegalArgumentException e){
+        return new ErrorResult(e, ARGUMENT_CONSTRAINTS);
+    }
+
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    @ExceptionHandler(UnknownException.class)
+    public ErrorResult exceptionHandler(UnknownException e){
+        return new ErrorResult(e, UNKNOWN);
+    }
 }
