@@ -7,6 +7,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import witty.studyapp.entity.Member;
 import witty.studyapp.execption.custom.NotFoundUserException;
 import witty.studyapp.execption.custom.PasswordWrongException;
+import witty.studyapp.execption.custom.RegisterArgumentException;
 import witty.studyapp.repository.member.MemberRepository;
 import witty.studyapp.service.member.MemberService;
 
@@ -28,20 +29,20 @@ class MemberServiceImplTest {
 
     private final String EMAIL = "testtest@naver.com";
 
-    @Test
-    @DisplayName("사용자 회원가입 서비스 테스트")
-    void register() {
-        Member member = createDemoUser(EMAIL);
-        memberService.register(member);
-        assertThat(memberRepository.findByEmail(EMAIL).isPresent()).isTrue();
-    }
-
     private Member createDemoUser(String email) {
         Member member = new Member();
         member.setEmail(email);
         member.setPassword("secret!secret");
         member.setName("testName");
         return member;
+    }
+
+    @Test
+    @DisplayName("사용자 회원가입 서비스 테스트")
+    void register() {
+        Member member = createDemoUser(EMAIL);
+        memberService.register(member);
+        assertThat(memberRepository.findByEmail(EMAIL).isPresent()).isTrue();
     }
 
     @Test
@@ -121,5 +122,14 @@ class MemberServiceImplTest {
         int prev = memberService.getAllMembers().size();
         memberService.deleteMember(member.getId());
         assertThat(memberService.getAllMembers().size()).isEqualTo(prev-1);
+    }
+
+    @Test
+    @DisplayName("중복 Email 가입 Exception 테스트")
+    void duplicateMemberEmail(){
+        Member member = createDemoUser(EMAIL);
+        memberService.register(member);
+        Member member2 = createDemoUser(EMAIL);
+        assertThrows(RegisterArgumentException.class, () -> memberService.register(member2));
     }
 }

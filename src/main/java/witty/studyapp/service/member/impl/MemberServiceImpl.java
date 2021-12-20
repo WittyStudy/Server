@@ -5,7 +5,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import witty.studyapp.entity.Member;
-import witty.studyapp.execption.custom.LoginArgumentException;
 import witty.studyapp.execption.custom.NotFoundUserException;
 import witty.studyapp.execption.custom.PasswordWrongException;
 import witty.studyapp.execption.custom.RegisterArgumentException;
@@ -15,6 +14,8 @@ import witty.studyapp.service.member.MemberService;
 
 import java.util.List;
 import java.util.Optional;
+
+import static witty.studyapp.constant.exception.ExceptionConstant.REGISTER_ALREADY_EXIST;
 
 @Slf4j
 @Service
@@ -27,7 +28,10 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public Long register(Member member) {
-        if(memberPolicy.verifyMember(member) && !isAlreadyExistEmail(member.getEmail())){
+        if(memberPolicy.verifyMember(member)){
+            if(isAlreadyExistEmail(member.getEmail())){
+                throw new RegisterArgumentException(REGISTER_ALREADY_EXIST);
+            }
             member.setPassword(passwordEncoder.encode(member.getPassword()));
             System.out.println("member.getPassword() = " + member.getPassword());
             return memberRepository.save(member).getId();
