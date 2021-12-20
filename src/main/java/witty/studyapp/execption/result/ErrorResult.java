@@ -12,6 +12,6 @@ public class ErrorResult {
 
     public ErrorResult(Exception e, String message) {
         this.code = e.getClass().getSimpleName();
-        this.message = message;
+        this.message = e.getMessage() == null ? message : e.getMessage();
     }
 }
