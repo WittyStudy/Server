@@ -9,8 +9,6 @@ import witty.studyapp.dto.comment.CommentResponseDTO;
 import witty.studyapp.dto.comment.CommentUpdateDTO;
 import witty.studyapp.entity.Comment;
 import witty.studyapp.entity.Member;
-import witty.studyapp.execption.custom.NoSuchBoardException;
-import witty.studyapp.execption.custom.NotFoundUserException;
 import witty.studyapp.service.comment.CommentService;
 
 import java.util.ArrayList;
@@ -30,32 +28,23 @@ public class CommentController {
     }
 
     @GetMapping("/{boardId}")
-    public List<CommentResponseDTO> getCommentsByBoardId(@PathVariable Long boardId) throws NotFoundUserException {
-        if (boardId == null || boardId == 0L) {
-            throw new NoSuchBoardException();
-        }
+    public List<CommentResponseDTO> getCommentsByBoardId(@PathVariable Long boardId) {
         return getCommentResponseDTOs(commentService.getCommentsByBoardId(boardId));
     }
 
     @PostMapping
     public Long createComment(@Login Member loginMember, @RequestBody CommentCreateDTO commentCreateDTO) {
-        return commentService.createComment(Comment.builder()
-                .content(commentCreateDTO.getContent())
-                .build(),
-                loginMember.getId(), commentCreateDTO.getBoardId());
+        return commentService.createComment(loginMember.getId(), commentCreateDTO);
     }
 
     @PatchMapping
     public Long updateCommentContext(@Login Member loginMember, @RequestBody CommentUpdateDTO commentUpdateDTO) {
-        return commentService.updateComment(loginMember, Comment.builder()
-                .content(commentUpdateDTO.getContent())
-                .id(commentUpdateDTO.getCommentId())
-                .build());
+        return commentService.updateComment(loginMember.getId(), commentUpdateDTO);
     }
 
     @DeleteMapping("/{commentId}")
     public Long deleteCommentById(@Login Member loginMember, @PathVariable Long commentId) {
-        return commentService.deleteComment(loginMember, commentId);
+        return commentService.deleteComment(loginMember.getId(), commentId);
     }
 
     private List<CommentResponseDTO> getCommentResponseDTOs(List<Comment> comments) {

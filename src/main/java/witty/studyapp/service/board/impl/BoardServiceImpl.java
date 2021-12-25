@@ -2,6 +2,7 @@ package witty.studyapp.service.board.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import witty.studyapp.dto.board.NoticeCreateDTO;
 import witty.studyapp.dto.board.NoticeUpdateDTO;
 import witty.studyapp.entity.Notice;
@@ -17,11 +18,13 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class BoardServiceImpl implements BoardService {
 
     private final BoardRepository boardRepository;
 
     @Override
+    @Transactional
     public Long createNotice(Notice notice) {
         return boardRepository.save(notice).getId();
     }
@@ -45,12 +48,14 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
+    @Transactional
     public Optional<Notice> viewNoticeDetailAndGet(Long id) {
         boardRepository.incrementView(id);
         return boardRepository.findById(id);
     }
 
     @Override
+    @Transactional
     public Long updateNotice(Long memberId, Long noticeId, NoticeUpdateDTO noticeDTO) {
         Notice notice = boardRepository.findById(noticeId).orElseThrow(NoSuchBoardException::new);
         if(!notice.getWriter().getId().equals(memberId)){
@@ -63,6 +68,7 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
+    @Transactional
     public Long deleteNotice(Long noticeId) {
         return boardRepository.findById(noticeId).map(notice -> {
             boardRepository.deleteById(notice.getId());
