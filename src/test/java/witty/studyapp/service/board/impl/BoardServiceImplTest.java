@@ -4,6 +4,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import witty.studyapp.dto.board.NoticeUpdateDTO;
 import witty.studyapp.entity.Member;
 import witty.studyapp.entity.Notice;
 import witty.studyapp.service.board.BoardService;
@@ -83,7 +84,7 @@ class BoardServiceImplTest {
         to.setContent("newc");
         to.setTitle("newt");
 
-        boardService.updateNotice(notice.getId(), to);
+        boardService.updateNotice(member.getId(), notice.getId(), new NoticeUpdateDTO(to.getTitle(), to.getContent()));
         Optional<Notice> byId = boardService.getById(notice.getId());
         assertThat(byId.isPresent()).isTrue();
         String title = byId.get().getTitle();

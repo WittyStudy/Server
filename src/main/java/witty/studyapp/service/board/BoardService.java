@@ -1,5 +1,6 @@
 package witty.studyapp.service.board;
 
+import witty.studyapp.dto.board.NoticeUpdateDTO;
 import witty.studyapp.entity.Notice;
 
 import java.util.List;
@@ -10,7 +11,7 @@ public interface BoardService {
     List<Notice> getNotices();
     Optional<Notice> getById(Long id);
     Optional<Notice> viewNoticeDetailAndGet(Long id);
-    Long updateNotice(Long id, Notice notice);
+    Long updateNotice(Long memberId, Long noticeId, NoticeUpdateDTO noticeDTO);
     Long deleteNotice(Long noticeId);
     List<Notice> getNoticesByTitle(String title);
 }

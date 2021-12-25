@@ -2,7 +2,10 @@ package witty.studyapp.service.board.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import witty.studyapp.dto.board.NoticeCreateDTO;
+import witty.studyapp.dto.board.NoticeUpdateDTO;
 import witty.studyapp.entity.Notice;
+import witty.studyapp.execption.custom.NoAuthorizationException;
 import witty.studyapp.execption.custom.NoSuchBoardException;
 import witty.studyapp.repository.board.BoardRepository;
 import witty.studyapp.service.board.BoardService;
@@ -48,12 +51,15 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
-    public Long updateNotice(Long id, Notice notice) {
-        boardRepository.findById(id).orElseThrow(NoSuchBoardException::new);
-        boardRepository.updateTitle(notice.getTitle(), id);
-        boardRepository.updateContent(notice.getContent(), id);
-        boardRepository.updateDate(new Date(System.currentTimeMillis()).toString(), id);
-        return id;
+    public Long updateNotice(Long memberId, Long noticeId, NoticeUpdateDTO noticeDTO) {
+        Notice notice = boardRepository.findById(noticeId).orElseThrow(NoSuchBoardException::new);
+        if(!notice.getWriter().getId().equals(memberId)){
+            throw new NoAuthorizationException();
+        }
+        notice.setContent(noticeDTO.getContent());
+        notice.setTitle(noticeDTO.getTitle());
+        notice.setDate(new Date(System.currentTimeMillis()).toString());
+        return noticeId;
     }
 
     @Override
