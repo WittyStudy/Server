@@ -2,37 +2,68 @@
 
 ### Spring Server Project for Group Study Application:: WittyStudy
 
-### ENVIRONMENT
+
+----------------------------------------
+
+## Index
+
+1. ENVIRONMENT
+
+
+2. SESSION
+
+
+3. TEST
+
+
+4. API
+
+- 4.1. Member API
+
+- 4.2. Board API
+
+5. DTO
+
+- 5.1. Member DTO
+
+- 5.2. Board DTO
+
+- 5.3. Comment DTO
+
+----------------------------------------
+
+## 1. ENVIRONMENT
 
 jasypt_encryptor_password="SECRET"
 
-### SESSION
+## 2. SESSION
 
-server offers JSESSIONID
+server offers JSESSIONID in response header when progress /members/login
 
-Every request require JSESSIONID except for "/register", "/login", "/logout", "**/test" 
+Every request require JSESSIONID except for below
+```
+"/members/register", 
+"/members/login",
+"/members/logout", 
+"/test/**", 
+"/boards"
+"/boards/title/**", 
+"/boards/{noticeId}" 
+```
 
-----------------------------------------
+## 3. TEST
 
-## 0. Index
+(METHOD=GET)
+```
+/test                   : simple api test
+/test/create/{number}   : create test data
+/test/clear             : clear all data
+```
 
-[1. API](#API)
 
-- [1.1. Member API](#MemberAPI)
+## 4. API
 
-- [2.1. Board API](#BoardAPI)
-
-[2. DTO](#DTO)
-
-- [2.1. Member DTO](#MemberDTO)
-
-- [2.2. Board DTO](#BoardDTO)
-
-----------------------------------------
-
-## <a name="API">1. API</a>
-
-### <a name="MemberAPI">1.1. Member API</a>
+### 4.1. Member API
 
 - register
 ```
@@ -75,14 +106,14 @@ method:	    "GET"
 path:	    "/members/test"
 ```
 
-### <a name="BoardAPI">1.2. Board API </a>
+### 4.2. Board API
 
 - create board
 
 ```
 method:	    "POST"
 path:	    "/boards"
-require:    application/json (NoticeDTO)
+require:    application/json (NoticeCreateDTO)
 ```
 
 - get boards
@@ -93,12 +124,30 @@ path:	    "/boards"
 response:   application/json (List<BoardResponseDTO>)
 ```
 
+- get board detail (set view = view + 1)
+
+```
+method:	    "GET"
+path:	    "/boards/{noticeId}"
+response:   application/json (NoticeDetailDTO)
+```
+
+
+- get boards by title
+
+```
+method:     "GET"
+path:       "/boards/title/{query}
+require:    String(query)
+response:   application/json (List<BoardResponseDTO>)
+```
+
 - update board
 
 ```
 method:	    "PATCH"
 path:	    "/boards/{noticeId}"
-require:    application/json (NoticeDTO)
+require:    application/json (NoticeUpdateDTO)
 ```
 
 - delete board
@@ -108,7 +157,7 @@ method:	    "DELETE"
 path:	    "/boards/{noticeId}"
 ```
 
-### <a name="CommentAPI">1.3. Comment API </a>
+### 4.3. Comment API
 
 - create comment
 ```
@@ -121,8 +170,7 @@ require:    application/json (CommentCreateDTO)
 - get comments
 ```
 method:     "GET"
-path:       "/comments/{option}/{id}"
-options:    "user" || "board" (board requires "id" path variable)
+path:       "/comments/{id}"
 response:    application/json (List<CommentResponseDTO>)
 ```
 
@@ -141,9 +189,9 @@ path:       "/comments/{commentId}"
 
 --------------------------------------------
 
-## <a name="DTO">2. DTO</a>
+## 5. DTO
 
-### <a name="MemberDTO">2.1. Member DTO </a>
+### 5.1. Member DTO
 
 - MemberRegisterDTO
 
@@ -160,31 +208,46 @@ String  email
 String  password
 ```
 
-### <a name="BoardDTO">2.2. Board DTO</a>
+### 5.2. Board DTO
 
-- NoticeDTO
+- NoticeCreateDTO
 ```
 String  title
 String  content
 ```
 
+- NoticeUpdateDTO
+```
+String  title
+String  content
+```
 
 - NoticeResponseDTO
 ```
+Long    id
 String  title
 String  writerName
 Long    views
 String  date
 ```
 
-### <a name="CommentDTO">2.3. Comment DTO</a>
+- NoticeDetailDTO
+```
+Long    id
+String  title
+String  writerName
+Long    views
+String  date
+String  content
+```
+
+### 5.3. Comment DTO
 
 - CommentCreateDTO
 ```
 Long    boardId
 String  content
 ```
-
 
 - CommentUpdateDTO
 ```
@@ -195,8 +258,7 @@ String  content
 
 - CommentResponseDTO
 ```
+Long    id
 String  content
 String  writerName
-String  boardTitle
 ```
-

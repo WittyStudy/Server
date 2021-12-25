@@ -1,7 +1,6 @@
 package witty.studyapp.entity;
 
 import lombok.*;
-import witty.studyapp.dto.board.NoticeDTO;
 
 import javax.persistence.*;
 

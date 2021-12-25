@@ -1,11 +1,11 @@
-package witty.studyapp.execption;
+package witty.studyapp.execption.custom;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ResponseStatus(HttpStatus.BAD_REQUEST)
-public class NotSupportedOptionException extends IllegalArgumentException{
-    public NotSupportedOptionException(String s) {
+public class MemberRelationException extends IllegalArgumentException{
+    public MemberRelationException(String s) {
         super(s);
     }
 }

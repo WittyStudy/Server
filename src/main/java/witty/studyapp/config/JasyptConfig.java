@@ -1,7 +1,5 @@
 package witty.studyapp.config;
 
-import lombok.Getter;
-import lombok.Setter;
 import org.jasypt.encryption.StringEncryptor;
 import org.jasypt.encryption.pbe.PooledPBEStringEncryptor;
 import org.jasypt.encryption.pbe.config.SimpleStringPBEConfig;

@@ -6,7 +6,8 @@ import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 import witty.studyapp.annotation.Login;
-import witty.studyapp.dto.member.MemberLoginDTO;
+import witty.studyapp.entity.Member;
+import witty.studyapp.execption.custom.NotLoginMemberException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -18,7 +19,7 @@ public class LoginMemberArgumentResolver implements HandlerMethodArgumentResolve
     @Override
     public boolean supportsParameter(MethodParameter parameter) {
         boolean hasLoginAnnotation = parameter.hasParameterAnnotation(Login.class);
-        boolean hasMemberType = MemberLoginDTO.class.isAssignableFrom(parameter.getParameterType());
+        boolean hasMemberType = Member.class.isAssignableFrom(parameter.getParameterType());
         return hasLoginAnnotation && hasMemberType;
     }
 
@@ -27,7 +28,7 @@ public class LoginMemberArgumentResolver implements HandlerMethodArgumentResolve
         HttpServletRequest request = (HttpServletRequest) webRequest.getNativeRequest();
         HttpSession session = request.getSession(false);
         if (session == null) {
-            return null;
+            throw new NotLoginMemberException();
         }
         return session.getAttribute(LOGIN_MEMBER);
     }
