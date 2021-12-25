@@ -2,6 +2,7 @@ package witty.studyapp.service.relation.impl;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import witty.studyapp.entity.Member;
 import witty.studyapp.entity.MemberRelation;
 import witty.studyapp.execption.custom.MemberRelationException;
@@ -18,12 +19,14 @@ import static witty.studyapp.constant.exception.ExceptionConstant.*;
 
 @Service
 @AllArgsConstructor
+@Transactional(readOnly = true)
 public class MemberRelationServiceImpl implements MemberRelationService {
 
     private final MemberRelationRepository memberRelationRepository;
     private final MemberRepository memberRepository;
 
     @Override
+    @Transactional
     public Long addRelation(Long id, Long targetId) {
 
         Member member = memberRepository.findById(id).orElseThrow(NotLoginMemberException::new);
@@ -55,6 +58,7 @@ public class MemberRelationServiceImpl implements MemberRelationService {
     }
 
     @Override
+    @Transactional
     public Long deleteRelation(Long id, Long targetId) {
         memberRepository.findById(id).orElseThrow(NotLoginMemberException::new);
         memberRepository.findById(targetId).orElseThrow(NotFoundUserException::new);
