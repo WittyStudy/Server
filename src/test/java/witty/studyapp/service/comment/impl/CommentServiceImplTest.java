@@ -15,13 +15,13 @@ import witty.studyapp.service.member.MemberService;
 
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 @Transactional
 @SpringBootTest
 class CommentServiceImplTest {
-    // TODO : TEST 3개 PASS 하기
 
     @Autowired
     MemberService memberService;
@@ -131,9 +131,11 @@ class CommentServiceImplTest {
             commentService.createComment(member.getId(), new CommentCreateDTO(notice.getId(), comment.getContent()));
         }
 
-        List<Comment> commentsByBoardId = commentService.getCommentsByBoardId(notice.getId());
-        for (Comment comment : commentsByBoardId) {
-            commentService.deleteComment(member.getId(), comment.getId());
+        List<Long> commentIds = commentService.getCommentsByBoardId(notice.getId()).stream()
+                .map(Comment::getId)
+                .collect(Collectors.toList());
+        for (Long commentId : commentIds) {
+            commentService.deleteComment(member.getId(), commentId);
         }
         assertThat(commentService.getCommentsByBoardId(notice.getId()).size()).isEqualTo(prev);
     }

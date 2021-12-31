@@ -10,19 +10,16 @@ import javax.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class Comment {
+public class Send {
 
     @Id
-    @GeneratedValue(strategy= GenerationType.IDENTITY)
-    @Column(name = "COMMENT_ID")
+    @GeneratedValue
+    @Column(name = "SEND_ID")
     private Long id;
-
-    @Column(name="content")
-    private String content;
 
     @ManyToOne(fetch = FetchType.LAZY)
     private Member writer;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Notice notice;
+    @OneToOne(fetch = FetchType.LAZY)
+    private Message message;
 }

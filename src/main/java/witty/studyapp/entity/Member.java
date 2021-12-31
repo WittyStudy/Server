@@ -4,6 +4,8 @@ import lombok.*;
 import witty.studyapp.dto.member.MemberRegisterDTO;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -11,12 +13,17 @@ import javax.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@Table(uniqueConstraints = @UniqueConstraint(columnNames = {"email"}))
 public class Member {
 
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     @Column(name = "MEMBER_ID")
     private Long id;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "MEMBER_INFO_ID")
+    private MemberInfo memberInfo;
 
     @Column(name="email")
     private String email;
@@ -27,4 +34,9 @@ public class Member {
     @Column(name="password")
     private String password;
 
+    @OneToMany(mappedBy = "writer")
+    private List<Comment> commentList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "writer")
+    private List<Notice> noticeList = new ArrayList<>();
 }

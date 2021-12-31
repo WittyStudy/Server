@@ -3,6 +3,8 @@ package witty.studyapp.entity;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -32,4 +34,12 @@ public class Notice {
 
     @Column(name="content")
     private String content;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "notice", cascade = {CascadeType.REMOVE})
+    private List<Comment> commentList = new ArrayList<>();
+
+    public Notice incrementView(){
+        this.views++;
+        return this;
+    }
 }

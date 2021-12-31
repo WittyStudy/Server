@@ -21,6 +21,7 @@ public class MemberRelation {
     @JoinColumn(name = "MEMBER_ID")
     private Member member;
 
+    // TODO : target member 조회 테스트 필요
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn
     private Member target;

@@ -50,8 +50,10 @@ public class BoardServiceImpl implements BoardService {
     @Override
     @Transactional
     public Optional<Notice> viewNoticeDetailAndGet(Long id) {
-        boardRepository.incrementView(id);
-        return boardRepository.findById(id);
+        return Optional.of(
+                boardRepository.findById(id)
+                        .orElseThrow(NoSuchBoardException::new)
+                        .incrementView());
     }
 
     @Override
