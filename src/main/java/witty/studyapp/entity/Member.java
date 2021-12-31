@@ -11,12 +11,17 @@ import javax.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@Table(uniqueConstraints = @UniqueConstraint(columnNames = {"email"}))
 public class Member {
 
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     @Column(name = "MEMBER_ID")
     private Long id;
+
+    @OneToOne
+    @JoinColumn(name = "MEMBER_INFO_ID")
+    private MemberInfo memberInfo;
 
     @Column(name="email")
     private String email;
