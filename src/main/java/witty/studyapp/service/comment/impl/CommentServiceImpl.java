@@ -35,14 +35,15 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public List<Comment> getCommentsByBoardId(Long boardId) {
-        return boardRepository.findById(boardId).map(commentRepository::findByBoard)
-                .orElseThrow(NoSuchBoardException::new);
+        return boardRepository.findById(boardId)
+                .orElseThrow(NoSuchBoardException::new)
+                .getCommentList();
     }
 
     @Override
     public List<Comment> getCommentsByMemberId(Long memberId) {
-        return memberRepository.findById(memberId).map(commentRepository::findByMember)
-                .orElseThrow(NotFoundUserException::new);
+        Member member = memberRepository.findById(memberId).orElseThrow(NotFoundUserException::new);
+        return member.getCommentList();
     }
 
     @Override
@@ -56,6 +57,9 @@ public class CommentServiceImpl implements CommentService {
         comment.setNotice(notice);
         comment.setWriter(member);
         commentRepository.save(comment);
+
+        member.getCommentList().add(comment);
+        notice.getCommentList().add(comment);
         return comment.getId();
     }
 
@@ -66,6 +70,9 @@ public class CommentServiceImpl implements CommentService {
         Comment comment = commentRepository.findById(commentId).orElseThrow(NoSuchCommentException::new);
         verifyWriterOnComment(member, comment);
         commentRepository.deleteById(commentId);
+
+        comment.getNotice().getCommentList().remove(comment);
+        member.getCommentList().remove(comment);
         return commentId;
     }
 
@@ -75,7 +82,8 @@ public class CommentServiceImpl implements CommentService {
         Member member = memberRepository.findById(memberId).orElseThrow(NotFoundUserException::new);
         Comment comment = commentRepository.findById(commentUpdateDTO.getCommentId()).orElseThrow(NoSuchCommentException::new);
         verifyWriterOnComment(member, comment);
-        commentRepository.updateComment(commentUpdateDTO.getCommentId(), commentUpdateDTO.getContent());
+        comment.setContent(commentUpdateDTO.getContent());
+
         return comment.getId();
     }
 

@@ -31,21 +31,19 @@ public class MemberServiceImpl implements MemberService {
     @Override
     @Transactional
     public Long register(Member member) {
-        if(memberPolicy.verifyMember(member)){
-            if(isAlreadyExistEmail(member.getEmail())){
+        if (memberPolicy.verifyMember(member)) {
+            if (isAlreadyExistEmail(member.getEmail())) {
                 throw new RegisterArgumentException(REGISTER_ALREADY_EXIST);
             }
             member.setPassword(passwordEncoder.encode(member.getPassword()));
-            System.out.println("member.getPassword() = " + member.getPassword());
             return memberRepository.save(member).getId();
-        }else {
+        } else {
             throw new RegisterArgumentException();
         }
     }
 
     @Override
     public Optional<Member> login(Member member) {
-        // TODO : 비밀번호 salt + hash 필요
         checkPresentEmail(member.getEmail());
         return Optional.of(verifyMemberLogin(member));
     }
@@ -53,9 +51,11 @@ public class MemberServiceImpl implements MemberService {
     @Override
     @Transactional
     public Long updateMemberName(Long memberId, String name) {
-        if(memberPolicy.isValidName(name)){
-            memberRepository.updateName(checkPresentId(memberId), name);
-        }else{
+        if (memberPolicy.isValidName(name)) {
+            memberRepository.findById(memberId)
+                    .orElseThrow(NotFoundUserException::new)
+                    .setName(name);
+        } else {
             throw new IllegalArgumentException();
         }
         return memberId;
@@ -64,20 +64,19 @@ public class MemberServiceImpl implements MemberService {
     @Override
     @Transactional
     public Long updateMemberPassword(Long memberId, String password) {
-        return memberRepository.findById(memberId).map(member -> {
-            if(memberPolicy.isValidPassword(password)) {
-                memberRepository.updatePassword(member.getId(), password);
-                return member.getId();
-            }else{
-                log.debug("memberId:'{}' is failed to update password:'{}'",memberId,password);
-                throw new IllegalArgumentException();
-            }
-        }).orElseThrow(NotFoundUserException::new);
+        if(memberPolicy.isValidPassword(password)){
+            memberRepository.findById(memberId)
+                    .orElseThrow(NotFoundUserException::new)
+                    .setPassword(password);
+        }else{
+            throw new IllegalArgumentException();
+        }
+        return memberId;
     }
 
     @Override
     public Optional<Member> getMemberById(Long id) {
-        return Optional.of(memberRepository.getById(id));
+        return memberRepository.findById(id);
     }
 
     @Override
@@ -93,21 +92,23 @@ public class MemberServiceImpl implements MemberService {
     }
 
     private Long checkPresentId(Long memberId) {
-        memberRepository.findById(memberId).orElseThrow(NotFoundUserException::new);
-        return memberId;
+        return memberRepository.findById(memberId)
+                .orElseThrow(NotFoundUserException::new)
+                .getId();
     }
 
-    private void checkPresentEmail(String email){
-        memberRepository.findByEmail(email).orElseThrow(NotFoundUserException::new);
+    private void checkPresentEmail(String email) {
+        memberRepository.findByEmail(email)
+                .orElseThrow(NotFoundUserException::new);
     }
 
-    private Member verifyMemberLogin(Member member){
+    private Member verifyMemberLogin(Member member) {
         return memberRepository.findByEmail(member.getEmail())
                 .filter(m -> passwordEncoder.matches(member.getPassword(), m.getPassword()))
                 .orElseThrow(PasswordWrongException::new);
     }
 
-    private boolean isAlreadyExistEmail(String email){
+    private boolean isAlreadyExistEmail(String email) {
         return memberRepository.findByEmail(email).isPresent();
     }
 }
