@@ -147,7 +147,7 @@ response:   application/json (List<BoardResponseDTO>)
 ```
 method:	    "PATCH"
 path:	    "/boards/{noticeId}"
-require:    application/json (NoticeDTO)
+require:    application/json (NoticeUpdateDTO)
 ```
 
 - delete board
@@ -216,6 +216,11 @@ String  title
 String  content
 ```
 
+- NoticeUpdateDTO
+```
+String  title
+String  content
+```
 
 - NoticeResponseDTO
 ```

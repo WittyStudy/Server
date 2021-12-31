@@ -9,6 +9,7 @@ import witty.studyapp.annotation.Login;
 import witty.studyapp.dto.board.NoticeCreateDTO;
 import witty.studyapp.dto.board.NoticeDetailDTO;
 import witty.studyapp.dto.board.NoticeResponseDTO;
+import witty.studyapp.dto.board.NoticeUpdateDTO;
 import witty.studyapp.entity.Member;
 import witty.studyapp.entity.Notice;
 import witty.studyapp.execption.custom.NoAuthorizationException;
@@ -65,20 +66,9 @@ public class BoardController {
     }
 
     @PatchMapping("/{noticeId}")
-    public Long updateBoard(@Login Member loginMember, @PathVariable long noticeId, @RequestBody @Validated NoticeCreateDTO noticeDTO) {
+    public Long updateBoard(@Login Member loginMember, @PathVariable long noticeId, @RequestBody @Validated NoticeUpdateDTO noticeDTO) {
         log.debug("Method updateBoard called");
-        boardService.updateNotice(noticeId, Notice.builder()
-                .title(noticeDTO.getTitle())
-                .content(noticeDTO.getContent())
-                .date(new Date(System.currentTimeMillis()).toString())
-                .build());
-        return boardService.getById(noticeId).map((n) -> {
-            if (n.getWriter() == loginMember) {
-                return loginMember.getId();
-            } else {
-                throw new NoAuthorizationException();
-            }
-        }).orElseThrow(NoSuchBoardException::new);
+        return boardService.updateNotice(loginMember.getId(), noticeId, noticeDTO);
     }
 
     @DeleteMapping("/{noticeId}")

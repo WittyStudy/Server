@@ -3,6 +3,7 @@ package witty.studyapp.repository.dummy;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import witty.studyapp.dto.comment.CommentCreateDTO;
 import witty.studyapp.entity.Comment;
 import witty.studyapp.entity.Member;
 import witty.studyapp.entity.Notice;
@@ -37,7 +38,7 @@ public class DummyCreator {
 
         List<Comment> comments = getComments(members, boards);
         for (Comment comment : comments) {
-            commentService.createComment(comment, comment.getWriter().getId(), comment.getNotice().getId());
+            commentService.createComment(comment.getWriter().getId(), new CommentCreateDTO(comment.getNotice().getId(), comment.getContent()));
         }
 
     }
@@ -50,7 +51,7 @@ public class DummyCreator {
 
         result = "[" + members.size() + "][" + notices.size() + "][" + comments.size() + "]";
         for (Comment comment : comments) {
-            commentService.deleteComment(memberService.getMemberById(comment.getWriter().getId()).get(), comment.getId());
+            commentService.deleteComment(memberService.getMemberById(comment.getWriter().getId()).get().getId(), comment.getId());
         }
         for (Notice notice : notices) {
             boardService.deleteNotice(notice.getId());

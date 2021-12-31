@@ -4,6 +4,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import witty.studyapp.dto.comment.CommentCreateDTO;
+import witty.studyapp.dto.comment.CommentUpdateDTO;
 import witty.studyapp.entity.Comment;
 import witty.studyapp.entity.Member;
 import witty.studyapp.entity.Notice;
@@ -75,8 +77,8 @@ class CommentServiceImplTest {
         for (int i = 0; i < 5; i++) {
             Comment comment = createComment(member, notice, "COMMENTs content #" + (i + 1));
             Comment comment2 = createComment(member2, notice, "COMMENTs content #" + (i + 1));
-            commentService.createComment(comment, member.getId(), notice.getId());
-            commentService.createComment(comment2, member2.getId(), notice.getId());
+            commentService.createComment(member.getId(), new CommentCreateDTO(notice.getId(), comment.getContent()));
+            commentService.createComment(member2.getId(), new CommentCreateDTO(notice.getId(), comment2.getContent()));
         }
 
         List<Comment> commentsByBoardId = commentService.getCommentsByBoardId(notice.getId());
@@ -103,8 +105,8 @@ class CommentServiceImplTest {
         for (int i = 0; i < 5; i++) {
             Comment comment = createComment(member, notice, "COMMENTs content #" + (i + 1));
             Comment comment2 = createComment(member2, notice, "COMMENTs content #" + (i + 1));
-            commentService.createComment(comment, member.getId(), notice.getId());
-            commentService.createComment(comment2, member2.getId(), notice.getId());
+            commentService.createComment(member.getId(), new CommentCreateDTO(notice.getId(), comment.getContent()));
+            commentService.createComment(member2.getId(), new CommentCreateDTO(notice.getId(), comment2.getContent()));
         }
 
         List<Comment> commentsByBoardId = commentService.getCommentsByMemberId(member.getId());
@@ -126,12 +128,12 @@ class CommentServiceImplTest {
 
         for (int i = 0; i < 5; i++) {
             Comment comment = createComment(member, notice, "COMMENTs content #" + (i + 1));
-            commentService.createComment(comment, member.getId(), notice.getId());
+            commentService.createComment(member.getId(), new CommentCreateDTO(notice.getId(), comment.getContent()));
         }
 
         List<Comment> commentsByBoardId = commentService.getCommentsByBoardId(notice.getId());
         for (Comment comment : commentsByBoardId) {
-            commentService.deleteComment(member, comment.getId());
+            commentService.deleteComment(member.getId(), comment.getId());
         }
         assertThat(commentService.getCommentsByBoardId(notice.getId()).size()).isEqualTo(prev);
     }
@@ -151,11 +153,11 @@ class CommentServiceImplTest {
         String new_content = "NEW_CONTENT";
         Comment comment2 = createComment(member, notice, new_content);
 
-        Long commentId = commentService.createComment(comment, member.getId(), notice.getId());
-        assertThat(commentId).isEqualTo(comment.getId());
+        Long commentId = commentService.createComment(member.getId(), new CommentCreateDTO(notice.getId(), comment.getContent()));
+        assertThat(commentId).isNotNull();
         comment2.setId(comment.getId());
 
-        commentService.updateComment(member, comment2);
+        commentService.updateComment(member.getId(), new CommentUpdateDTO(commentId, comment2.getContent()));
         Comment updatedComment = commentService.getAllComments().stream().filter(c -> c.getId().equals(commentId)).findAny().get();
         assertThat(updatedComment.getContent()).isEqualTo(new_content);
     }

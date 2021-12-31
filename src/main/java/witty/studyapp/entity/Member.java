@@ -4,6 +4,8 @@ import lombok.*;
 import witty.studyapp.dto.member.MemberRegisterDTO;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -16,7 +18,7 @@ public class Member {
 
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
-    @Column(name = "MEMBER_ID")
+    @Column(name = "member_id")
     private Long id;
 
     @OneToOne
@@ -32,4 +34,13 @@ public class Member {
     @Column(name="password")
     private String password;
 
+    // TODO : member에서 commentList 목록 출력 테스트 및 이용 필요
+    @OneToMany(fetch = FetchType.LAZY)
+    @JoinColumn(name="writer")
+    private List<Comment> commentList = new ArrayList<>();
+
+    // TODO : member에서 boardList 목록 출력 테스트 및 이용 필요
+    @OneToMany(fetch = FetchType.LAZY)
+    @JoinColumn(name="writer")
+    private List<Notice> noticeList = new ArrayList<>();
 }

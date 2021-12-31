@@ -2,8 +2,12 @@ package witty.studyapp.service.comment.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import witty.studyapp.dto.comment.CommentCreateDTO;
+import witty.studyapp.dto.comment.CommentUpdateDTO;
 import witty.studyapp.entity.Comment;
 import witty.studyapp.entity.Member;
+import witty.studyapp.entity.Notice;
 import witty.studyapp.execption.custom.NoAuthorizationException;
 import witty.studyapp.execption.custom.NoSuchBoardException;
 import witty.studyapp.execption.custom.NoSuchCommentException;
@@ -17,6 +21,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class CommentServiceImpl implements CommentService {
 
     private final MemberRepository memberRepository;
@@ -31,9 +36,7 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public List<Comment> getCommentsByBoardId(Long boardId) {
         return boardRepository.findById(boardId).map(commentRepository::findByBoard)
-                .orElseThrow(() -> {
-                    throw new NoSuchBoardException();
-                });
+                .orElseThrow(NoSuchBoardException::new);
     }
 
     @Override
@@ -43,19 +46,23 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public Long createComment(Comment comment, Long memberId, Long boardId) {
-        return memberRepository.findById(memberId).map(member -> {
-            comment.setWriter(member);
-            return boardRepository.findById(boardId).map(notice -> {
-                comment.setNotice(notice);
-                commentRepository.save(comment);
-                return comment.getId();
-            }).orElseThrow(NoSuchBoardException::new);
-        }).orElseThrow(NotFoundUserException::new);
+    @Transactional
+    public Long createComment(Long memberId, CommentCreateDTO commentCreateDTO) {
+        Member member = memberRepository.findById(memberId).orElseThrow(NotFoundUserException::new);
+        Notice notice = boardRepository.findById(commentCreateDTO.getBoardId()).orElseThrow(NoSuchBoardException::new);
+
+        Comment comment = new Comment();
+        comment.setContent(commentCreateDTO.getContent());
+        comment.setNotice(notice);
+        comment.setWriter(member);
+        commentRepository.save(comment);
+        return comment.getId();
     }
 
     @Override
-    public Long deleteComment(Member member, long commentId) {
+    @Transactional
+    public Long deleteComment(Long memberId, long commentId) {
+        Member member = memberRepository.findById(memberId).orElseThrow(NotFoundUserException::new);
         Comment comment = commentRepository.findById(commentId).orElseThrow(NoSuchCommentException::new);
         verifyWriterOnComment(member, comment);
         commentRepository.deleteById(commentId);
@@ -63,10 +70,12 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public Long updateComment(Member member, Comment newComment) {
-        Comment comment = commentRepository.findById(newComment.getId()).orElseThrow(NoSuchCommentException::new);
+    @Transactional
+    public Long updateComment(Long memberId, CommentUpdateDTO commentUpdateDTO) {
+        Member member = memberRepository.findById(memberId).orElseThrow(NotFoundUserException::new);
+        Comment comment = commentRepository.findById(commentUpdateDTO.getCommentId()).orElseThrow(NoSuchCommentException::new);
         verifyWriterOnComment(member, comment);
-        commentRepository.updateComment(newComment.getId(), newComment.getContent());
+        commentRepository.updateComment(commentUpdateDTO.getCommentId(), commentUpdateDTO.getContent());
         return comment.getId();
     }
 

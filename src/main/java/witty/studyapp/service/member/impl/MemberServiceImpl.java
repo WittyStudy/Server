@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import witty.studyapp.entity.Member;
 import witty.studyapp.execption.custom.NotFoundUserException;
 import witty.studyapp.execption.custom.PasswordWrongException;
@@ -20,6 +21,7 @@ import static witty.studyapp.constant.exception.ExceptionConstant.REGISTER_ALREA
 @Slf4j
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class MemberServiceImpl implements MemberService {
 
     private final MemberRepository memberRepository;
@@ -27,6 +29,7 @@ public class MemberServiceImpl implements MemberService {
     private final PasswordEncoder passwordEncoder;
 
     @Override
+    @Transactional
     public Long register(Member member) {
         if(memberPolicy.verifyMember(member)){
             if(isAlreadyExistEmail(member.getEmail())){
@@ -48,6 +51,7 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
+    @Transactional
     public Long updateMemberName(Long memberId, String name) {
         if(memberPolicy.isValidName(name)){
             memberRepository.updateName(checkPresentId(memberId), name);
@@ -58,6 +62,7 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
+    @Transactional
     public Long updateMemberPassword(Long memberId, String password) {
         return memberRepository.findById(memberId).map(member -> {
             if(memberPolicy.isValidPassword(password)) {
@@ -81,6 +86,7 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
+    @Transactional
     public Long deleteMember(Long memberId) {
         memberRepository.deleteById(checkPresentId(memberId));
         return memberId;
