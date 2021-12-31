@@ -17,6 +17,6 @@ public class StudyInfo {
     @Column(name = "STUDY_INFO_ID")
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private StudyPolicy studyPolicy;
 }

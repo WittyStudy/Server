@@ -14,11 +14,11 @@ public class MemberRelation {
 
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
-    @Column(name = "relation_id")
+    @Column(name = "RELATION_ID")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id")
+    @JoinColumn(name = "MEMBER_ID")
     private Member member;
 
     // TODO : target member 조회 테스트 필요

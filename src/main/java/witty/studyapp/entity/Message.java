@@ -2,10 +2,7 @@ package witty.studyapp.entity;
 
 import lombok.*;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Getter
 @Setter
@@ -22,4 +19,10 @@ public class Message {
 
     @Column(name = "content")
     private String content;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Member receiver;
+
+    @OneToOne(mappedBy = "message")
+    private Send send;
 }

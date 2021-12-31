@@ -17,9 +17,9 @@ public class Send {
     @Column(name = "SEND_ID")
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Member writer;
 
-    @ManyToOne
+    @OneToOne(fetch = FetchType.LAZY)
     private Message message;
 }

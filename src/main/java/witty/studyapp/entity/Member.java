@@ -18,10 +18,10 @@ public class Member {
 
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
-    @Column(name = "member_id")
+    @Column(name = "MEMBER_ID")
     private Long id;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "MEMBER_INFO_ID")
     private MemberInfo memberInfo;
 
@@ -34,13 +34,9 @@ public class Member {
     @Column(name="password")
     private String password;
 
-    // TODO : member에서 commentList 목록 출력 테스트 및 이용 필요
-    @OneToMany(fetch = FetchType.LAZY)
-    @JoinColumn(name="writer")
+    @OneToMany(mappedBy = "writer")
     private List<Comment> commentList = new ArrayList<>();
 
-    // TODO : member에서 boardList 목록 출력 테스트 및 이용 필요
-    @OneToMany(fetch = FetchType.LAZY)
-    @JoinColumn(name="writer")
+    @OneToMany(mappedBy = "writer")
     private List<Notice> noticeList = new ArrayList<>();
 }

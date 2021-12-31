@@ -16,14 +16,14 @@ public class Notice {
 
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
-    @Column(name = "notice_id")
+    @Column(name = "NOTICE_ID")
     private Long id;
 
     @Column(name="title")
     private String title;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id")
+    @JoinColumn(name = "MEMBER_ID")
     private Member writer;
 
     @Column(name="views")
@@ -35,8 +35,11 @@ public class Notice {
     @Column(name="content")
     private String content;
 
-    // TODO : notice에서 commentList 목록 출력 테스트 및 이용 필요
-    @OneToMany(fetch = FetchType.LAZY)
-    @JoinColumn(name="notice")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "notice", cascade = {CascadeType.REMOVE})
     private List<Comment> commentList = new ArrayList<>();
+
+    public Notice incrementView(){
+        this.views++;
+        return this;
+    }
 }

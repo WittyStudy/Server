@@ -17,9 +17,9 @@ public class StudyRelation {
     @Column(name = "STUDY_RELATION_ID")
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Member participant;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Study study;
 }

@@ -17,9 +17,9 @@ public class Study {
     @Column(name = "STUDY_ID")
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Member master;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     private StudyInfo studyInfo;
 }
